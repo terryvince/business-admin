@@ -47,27 +47,27 @@
     </el-form>
     <el-divider direction="horizontal"></el-divider>
     <el-table :data="list" border style="width: 100%">
-      <el-table-column label="序号">
+      <el-table-column label="序号" width="50px">
         <template slot-scope="scope">
           <span>{{ scope.$index + 1 }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="t_tid" label="订单号"></el-table-column>
-      <el-table-column prop="to_title" label="订单商品" width="180"></el-table-column>
-      <el-table-column prop="goods_type_txt" label="商品类型" width="180"></el-table-column>
-      <el-table-column label="序号">
+      <el-table-column prop="t_tid" label="订单号" width="200px"></el-table-column>
+      <el-table-column prop="to_title" label="订单商品" width="180px"></el-table-column>
+      <el-table-column prop="goods_type_txt" label="商品类型" width="90"></el-table-column>
+      <el-table-column label="商品数量/核销码"  width="140">
         <template slot-scope="scope">
           <div>
             <span>
-              {{ scope.row.ticket_valid }}/已核销{{
-              scope.row.ticket_used
-              }}剩余{{ scope.row.ticket_valid }}
+              <p>核销剩余:{{ scope.row.ticket_valid }}</p>
+              <p>已被核销:{{scope.row.ticket_used}}</p>
+              <p>商品数量:{{scope.row.to_num}}</p>
             </span>
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="g_seller_price" label="结算价"></el-table-column>
-      <el-table-column>
+      <el-table-column prop="g_seller_price" label="结算价" width="100"></el-table-column>
+      <el-table-column  label="收货信息">
         <template slot-scope="scope">
           <div>
             <p>昵称: {{scope.row.t_buyer_nick}}</p>
@@ -78,7 +78,7 @@
       </el-table-column>
       <el-table-column prop="t_note" label="备注"></el-table-column>
       <el-table-column prop="t_pay_time" label="支付时间"></el-table-column>
-      <el-table-column prop="t_status_txt" label="已售"></el-table-column>
+      <el-table-column prop="t_status_txt" label="状态"></el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
           <div>
@@ -112,6 +112,10 @@
   min-height: 300px;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
   padding: 20px;
+}
+p {
+  margin: 0;
+  padding: 0;
 }
 </style>
 
@@ -191,14 +195,14 @@ export default {
       this.getList();
     },
     getList() {
-      orderList(this.page,this.size,this.form).then(response => {
+      orderList(this.page, this.size, this.form).then(response => {
         const resp = response.data;
         if (resp.ec !== 200) {
           this.$message.error(resp.em);
           return false;
         }
         this.list = resp.data.list;
-        this.total = resp.data.count
+        this.total = resp.data.count;
       });
     }
   }
