@@ -130,7 +130,7 @@ export default {
     return {
       form: {
         keyword: "",
-        goodsType: "",
+        type: "",
         timeRange: "",
         status: "",
         phone: ""

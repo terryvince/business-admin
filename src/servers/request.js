@@ -12,11 +12,11 @@ async function postLogin({ username, password }) {
 }
 
 function orderList(page,size,search) {
-  return http.post("merchant.php", {
-    map: "merchant_order",
-    page,
-    size,
-    search
-  });
+  return http({
+    url:`merchant.php?map=merchant_order&page=${page}&size=${size}`,
+    method:'post',
+    data:search
+  })
+  
 }
 export { postLogin, orderList };
