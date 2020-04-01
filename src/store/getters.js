@@ -1,0 +1,14 @@
+export default {
+  menus: state => {
+    return state.menus;
+  },
+  layout: state => {
+    return state.layout;
+  },
+  isLogin: state => {
+    return state.isLogin;
+  },
+  userInfo: state => {
+    return state.userInfo;
+  }
+};
