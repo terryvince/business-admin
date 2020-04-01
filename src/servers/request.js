@@ -11,12 +11,29 @@ async function postLogin({ username, password }) {
   return response;
 }
 
-function orderList(page,size,search) {
+function orderList(page, size, search) {
   return http({
-    url:`merchant.php?map=merchant_order&page=${page}&size=${size}`,
-    method:'post',
-    data:search
+    url: `merchant.php?map=merchant_order&page=${page}&size=${size}`,
+    method: 'post',
+    data: search
   })
-  
+
 }
-export { postLogin, orderList };
+
+function checkTicket(data) {
+  return http({
+    url: `merchant.php?map=check_code`,
+    method: 'post',
+    data
+  })
+}
+
+function verifyTicket(data) {
+  
+  return http({
+    url: `merchant.php?map=quickly_verify`,
+    method: 'post',
+    data
+  })
+}
+export { postLogin, orderList, checkTicket, verifyTicket };

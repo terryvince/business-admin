@@ -80,9 +80,7 @@ const routes = [
       title: "快捷核销"
     },
     component: () =>
-      import(
-        /* webpackChunkName: "shortcutCheck" */ "../views/shortcutCheck.vue"
-      )
+      import("@/views/ticket/quick-verify.vue")
   },
   {
     path: "*",
