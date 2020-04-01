@@ -11,4 +11,10 @@ async function postLogin({ username, password }) {
   return response;
 }
 
-export { postLogin };
+function orderList(search) {
+  return http.post("merchant.php", {
+    map: "merchant_order",
+    search
+  });
+}
+export { postLogin, orderList };

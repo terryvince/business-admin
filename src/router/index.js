@@ -51,7 +51,7 @@ const routes = [
       title: "订单管理"
     },
     component: () =>
-      import(/* webpackChunkName: "order" */ "../views/order.vue")
+      import(/* webpackChunkName: "order" */ "@/views/order/index.vue")
   },
   {
     path: "/checkRecorder",
