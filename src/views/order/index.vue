@@ -8,30 +8,37 @@
       class="flex-main-start"
     >
       <el-form-item>
-        <el-input v-model="form.goodsName" placeholder="商品名称"></el-input>
+        <el-input v-model="form.keyword" placeholder="商品名称"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-select v-model="form.region" placeholder="请选择商品类型">
-          <el-option label="物流商品" value="shanghai"></el-option>
-          <el-option label="核销商品" value="beijing"></el-option>
+        <el-select v-model="form.type" placeholder="请选择商品类型">
+          <el-option label="物流商品" value="ship"></el-option>
+          <el-option label="核销商品" value="code"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-input v-model="form.goodsName" placeholder="订单号/手机号/昵称/姓名"></el-input>
+        <el-input v-model="form.phone" placeholder="订单号/手机号/昵称/姓名"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-select v-model="form.region" placeholder="订单状态">
-          <el-option label="待发货" value="shanghai"></el-option>
+        <el-select v-model="form.status" placeholder="订单状态">
+          <el-option
+            v-for="item in orderStatus"
+            :key="item.type"
+            :value="item.type"
+            :label="item.name"
+          ></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="下单时间">
-        <el-col :span="11">
-          <el-date-picker type="date" placeholder="选择日期" v-model="form.date1" style="width: 100%;"></el-date-picker>
-        </el-col>
-        <el-col class="line" :span="2">-</el-col>
-        <el-col :span="11">
-          <el-time-picker placeholder="选择时间" v-model="form.date2" style="width: 100%;"></el-time-picker>
-        </el-col>
+      <el-form-item>
+        <el-date-picker
+          v-model="form.timeRange"
+          type="daterange"
+          range-separator="至"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+          format="yyyy-MM-dd"
+          value-format="yyyy-MM-dd"
+        ></el-date-picker>
       </el-form-item>
       <el-form-item>
         <el-button class="left-20" type="primary" @click="onSubmit">搜索</el-button>
@@ -61,12 +68,11 @@
       </el-table-column>
       <el-table-column prop="g_seller_price" label="结算价"></el-table-column>
       <el-table-column>
-      <template slot-scope="scope">
+        <template slot-scope="scope">
           <div>
-            <p>昵称: {{scope.row.t_buyer_nick}} </p>
-            <p>电话: {{scope.row.ma_phone}} </p>
-            <p>地址: {{scope.row.g_verify_type == 'code' ? '无需地址' : scope.row.t_address_ext}} </p>
-            
+            <p>昵称: {{scope.row.t_buyer_nick}}</p>
+            <p>电话: {{scope.row.ma_phone}}</p>
+            <p>地址: {{scope.row.g_verify_type == 'code' ? '无需地址' : scope.row.t_address_ext}}</p>
           </div>
         </template>
       </el-table-column>
@@ -77,7 +83,11 @@
         <template slot-scope="scope">
           <div>
             <el-link v-if="scope.row.g_verify_type == 'ship'" type="primary">发货</el-link>
-            <el-link v-if="scope.row.g_verify_type == 'ship'" type="primary" style="margin-left:10px">修改收货信息</el-link>
+            <el-link
+              v-if="scope.row.g_verify_type == 'ship'"
+              type="primary"
+              style="margin-left:10px"
+            >修改收货信息</el-link>
           </div>
         </template>
       </el-table-column>
@@ -86,10 +96,11 @@
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        :current-page.sync="currentPage3"
-        :page-size="100"
-        layout="prev, pager, next, jumper"
-        :total="1000"
+        :current-page.sync="page"
+        :page-sizes="[10, 20, 50]"
+        :page-size="10"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="total"
       ></el-pagination>
     </div>
   </div>
@@ -105,15 +116,61 @@
 </style>
 
 <script>
+const orderStatus = [
+  { type: "wait_send", name: "待发货" },
+  { type: "wait_use", name: "待核销" },
+  { type: "send", name: "已发货" },
+  { type: "confirm", name: "已收货" },
+  { type: "complete", name: "已完成" }
+];
 import { orderList } from "@/servers/request";
 export default {
   name: "order",
   data: function() {
     return {
-      form: { goodsName: "", goodsType: "", date1: "", date2: "" },
-      currentPage3: 5,
+      form: {
+        keyword: "",
+        goodsType: "",
+        timeRange: "",
+        status: "",
+        phone: ""
+      },
+      total: 0,
+      page: 1,
+      size: 10,
       list: [],
-      search: {}
+      orderStatus,
+      pickerOptions: {
+        shortcuts: [
+          {
+            text: "最近一周",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit("pick", [start, end]);
+            }
+          },
+          {
+            text: "最近一个月",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+              picker.$emit("pick", [start, end]);
+            }
+          },
+          {
+            text: "最近三个月",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+              picker.$emit("pick", [start, end]);
+            }
+          }
+        ]
+      }
     };
   },
   created() {
@@ -122,23 +179,26 @@ export default {
   components: {},
   methods: {
     onSubmit() {
-      console.log("11");
+      this.getList();
     },
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
+      this.page = 1;
+      this.size = val;
+      this.getList();
     },
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
+      this.page = val;
+      this.getList();
     },
     getList() {
-      orderList(this.search).then(response => {
+      orderList(this.page,this.size,this.form).then(response => {
         const resp = response.data;
         if (resp.ec !== 200) {
-          this.$message.error(resp.data.em);
+          this.$message.error(resp.em);
           return false;
         }
         this.list = resp.data.list;
-        console.log(this.list);
+        this.total = resp.data.count
       });
     }
   }

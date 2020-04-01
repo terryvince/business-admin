@@ -11,9 +11,11 @@ async function postLogin({ username, password }) {
   return response;
 }
 
-function orderList(search) {
+function orderList(page,size,search) {
   return http.post("merchant.php", {
     map: "merchant_order",
+    page,
+    size,
     search
   });
 }
