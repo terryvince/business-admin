@@ -8,13 +8,14 @@
       class="flex-main-start"
     >
       <el-form-item>
-        <span>可申请提现金额：1800.00</span>
+        <span>可申请提现金额：{{withdraw_data.sum_amount}}</span>
         <el-button class="left-20" type="primary" @click="withdrawAmount"
           >申请提现</el-button
         >
       </el-form-item>
       <el-form-item class="left-20">
         <el-select v-model="form.status" placeholder="提现状态">
+          <el-option label="--请选择--" value=""></el-option>
           <el-option label="审核未通过" value="-1"></el-option>
           <el-option label="待审核" value="1"></el-option>
           <el-option label="已打款" value="2"></el-option>
@@ -22,16 +23,16 @@
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-button class="left-20" type="primary" @click="onSubmit"
+        <el-button class="left-20" type="primary" @click="getWithdrawList"
           >搜索</el-button
         >
-        <el-button class="left-20" type="primary" @click="onSubmit"
+        <el-button class="left-20" type="primary" @click="getWithdrawList"
           >导出到Excel</el-button
         >
       </el-form-item>
     </el-form>
     <el-divider direction="horizontal"></el-divider>
-    <el-table :data="list" border style="width: 100%">
+    <el-table v-loading="location" element-loadinf-text="正在拼命加载" :data="list" border style="width: 100%">
       <el-table-column label="序号">
         <template slot-scope="scope">
           <span>{{ scope.$index + 1 }}</span>
@@ -44,9 +45,9 @@
       <el-table-column prop="w_status" label="提现状态"> </el-table-column>
       <el-table-column prop="w_create_time" label="申请时间"> </el-table-column>
       <el-table-column label="操作">
-        <template>
+        <template slot-scope="scope">
           <el-link type="primary"
-                   @click="dialogTableVisible = true"
+                   @click="clickWithdrawProduct(scope.row.w_id)"
                   >提现产品</el-link>
           <el-link   style="margin-left:10px" type="primary"> 查看详情</el-link >
         </template>
@@ -64,22 +65,27 @@
       >
       </el-pagination>
     </div>
-    <!-- 查看详情弹框 -->
-    <el-dialog title="提现产品" :visible.sync="dialogTableVisible">
-      <el-table :data="gridData">
+    <!-- 查看提现产品 -->
+    <el-dialog title="提现产品"  :visible.sync="dialogTableVisible">
+      <el-table v-loading="location_product" :data="gridData">
         <el-table-column
-          property="date"
+          property="g_name"
           label="商品名称"
           width="150"
         ></el-table-column>
         <el-table-column
-          property="name"
+          property="tv_code"
           label="核销码"
           width="80"
         ></el-table-column>
-        <el-table-column property="address" label="核销/发货时间"></el-table-column>
-        <el-table-column property="address" label="结算价格"></el-table-column>
-        <el-table-column property="address" label="核销人/发货人"></el-table-column>
+        <el-table-column property="tv_createtime" label="核销/发货时间"></el-table-column>
+        <el-table-column property="tv_price" label="结算价格"></el-table-column>
+        <el-table-column property="ver_name" label="核销人/发货人"></el-table-column>
+      </el-table>
+    </el-dialog>
+    <!-- 查看提现详情 -->
+    <el-dialog title="提现详情"  :visible.sync="withdraw_detail">
+      <el-table>
       </el-table>
     </el-dialog>
   </div>
@@ -95,7 +101,7 @@
 </style>
 
 <script>
-import {withdrawList} from "@/servers/request";
+import {withdrawList,withdrawApply,withdrawProduct} from "@/servers/request";
 export default {
   name: "withdraw",
   data: function() {
@@ -105,29 +111,13 @@ export default {
       size: 10,
       total: 0,
       list: [],
-      gridData: [
-        {
-          date: "2016-05-02",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄"
-        },
-        {
-          date: "2016-05-04",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄"
-        },
-        {
-          date: "2016-05-01",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄"
-        },
-        {
-          date: "2016-05-03",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄"
-        }
-      ],
-      dialogTableVisible: false
+      location: false,
+      location_product: false,
+
+      withdraw_data: [],
+      gridData: [],
+      dialogTableVisible: false,
+      withdraw_detail: false
     };
   },
   created() {
@@ -135,10 +125,13 @@ export default {
   },
   components: {},
   methods: {
+    // 申请列表
     getWithdrawList() {
+      this.location = true;
       this.form.page = this.page;
-      this.form.page_siz = this.size;
+      this.form.page_size = this.size;
       withdrawList(this.form).then(response => {
+        this.location = false;
         const resp = response.data;
         if (resp.ec !== 200) {
           this.$message.error(resp.em);
@@ -146,13 +139,14 @@ export default {
         }
         this.list = resp.data.list;
         this.page = resp.data.page;
+        this.withdraw_data = resp.data.withdraw_info;
         this.total = parseInt(resp.data.count);
       });
     },
     // 申请提现
     withdrawAmount() {
       this.$confirm(
-        "确定要申请提现1800.00吗？本次手续费千分之七（12.6），实际到账1787.4",
+        "确定要申请提现"+this.withdraw_data.sum_amount+"吗？本次手续费"+this.withdraw_data.rate+"%（"+(this.withdraw_data.rate_price)+"），实际到账" + this.withdraw_data.real_amount,
         "提示",
         {
           confirmButtonText: "确定",
@@ -161,9 +155,18 @@ export default {
         }
       )
         .then(() => {
-          this.$message({
-            type: "success",
-            message: "提现成功!"
+          withdrawApply({}).then(response => {
+            const resp = response.data;
+            if (resp.ec !== 200) {
+              this.$message.error(resp.em);
+              return false;
+            } else {
+              this.$message({
+                type: "success",
+                message: "提现成功!"
+              });
+              this.getWithdrawList();
+            }
           });
         })
         .catch(() => {
@@ -172,6 +175,20 @@ export default {
             message: "已取消"
           });
         });
+    },
+    // 提现产品
+    clickWithdrawProduct(e) {
+      this.dialogTableVisible = true;
+      this.location_product = true;
+      withdrawProduct({w_id:e}).then(response =>{
+        const resp = response.data;
+        this.location_product = false;
+        if (resp.ec !== 200) {
+          this.$message.error(resp.em);
+          return false;
+        }
+        this.gridData = resp.data.list;
+      });
     },
     handleSizeChange(val) {
       this.page = 1;

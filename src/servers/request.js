@@ -11,8 +11,18 @@ async function postLogin({ username, password }) {
   return response;
 }
 
-async function withdrawList(form) {
+
+async function withdrawList(form) { // 提现列表
   form.map = 'merchant_withdraw';
+  return  await http.post("merchant.php", form);
+}
+
+async function withdrawApply(form) { // 申请提现
+  form.map = 'merchant_apply';
+  return  await http.post("merchant.php", form);
+}
+async function withdrawProduct(form) { // 提现产品
+  form.map = 'merchant_withdraw_product';
   return  await http.post("merchant.php", form);
 }
 
@@ -40,4 +50,6 @@ function verifyTicket(data) {
     data
   })
 }
-export { postLogin, orderList, checkTicket, verifyTicket,withdrawList };
+
+
+export { postLogin, orderList, checkTicket, verifyTicket,withdrawList,withdrawApply,withdrawProduct };
