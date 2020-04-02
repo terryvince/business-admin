@@ -54,14 +54,14 @@ const routes = [
       import(/* webpackChunkName: "order" */ "@/views/order/index.vue")
   },
   {
-    path: "/checkRecorder",
-    name: "checkRecorder",
+    path: "/verifyRecord",
+    name: "verifyRecord",
     meta: {
       title: "核销记录"
     },
     component: () =>
       import(
-        /* webpackChunkName: "checkRecorder" */ "../views/checkRecorder.vue"
+        /* webpackChunkName: "checkRecorder" */ "@/views/ticket/verify-recode.vue"
       )
   },
   {
@@ -74,8 +74,8 @@ const routes = [
       import(/* webpackChunkName: "withdraw" */ "../views/withdraw.vue")
   },
   {
-    path: "/shortcutCheck",
-    name: "shortcutCheck",
+    path: "/quickVerify",
+    name: "quickVerify",
     meta: {
       title: "快捷核销"
     },

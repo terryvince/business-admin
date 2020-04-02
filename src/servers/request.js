@@ -11,6 +11,7 @@ async function postLogin({ username, password }) {
   return response;
 }
 
+//订单列表
 function orderList(page, size, search) {
   return http({
     url: `merchant.php?map=merchant_order&page=${page}&size=${size}`,
@@ -19,7 +20,7 @@ function orderList(page, size, search) {
   })
 
 }
-
+//检测核销码是否能被核销
 function checkTicket(data) {
   return http({
     url: `merchant.php?map=check_code`,
@@ -27,13 +28,21 @@ function checkTicket(data) {
     data
   })
 }
-
+//核销
 function verifyTicket(data) {
-  
+
   return http({
     url: `merchant.php?map=quickly_verify`,
     method: 'post',
     data
   })
 }
-export { postLogin, orderList, checkTicket, verifyTicket };
+
+function verifyList(page, size, data) {
+  return http({
+    url: `merchant.php?map=verify_list&page=${page}&size=${size}`,
+    method: 'post',
+    data
+  })
+}
+export { postLogin, orderList, checkTicket, verifyTicket, verifyList };
