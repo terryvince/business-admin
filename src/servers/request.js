@@ -11,12 +11,16 @@ async function postLogin({ username, password }) {
   return response;
 }
 
+async function withdrawList(form) {
+  form.map = 'merchant_withdraw';
+  return  await http.post("merchant.php", form);
+}
+
 function orderList(page,size,search) {
   return http({
     url:`merchant.php?map=merchant_order&page=${page}&size=${size}`,
     method:'post',
     data:search
   })
-  
 }
-export { postLogin, orderList };
+export { postLogin, orderList, withdrawList };

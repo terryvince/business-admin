@@ -71,7 +71,7 @@ const routes = [
       title: "提现记录"
     },
     component: () =>
-      import(/* webpackChunkName: "withdraw" */ "../views/withdraw.vue")
+      import(/* webpackChunkName: "withdraw" */ "@/views/withdraw/index.vue")
   },
   {
     path: "/shortcutCheck",
