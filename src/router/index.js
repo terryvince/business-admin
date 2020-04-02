@@ -42,7 +42,7 @@ const routes = [
       title: "商品管理"
     },
     component: () =>
-      import(/* webpackChunkName: "goods" */ "../views/goods.vue")
+      import(/* webpackChunkName: "goods" */ "@/views/goods/index.vue")
   },
   {
     path: "/order",

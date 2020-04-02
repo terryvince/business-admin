@@ -71,7 +71,6 @@ export default {
   data: function() {
     return {
       search: { keyword: "",timeRange:''},
-      currentPage3: 5,
       page: 1,
       size: 10,
       total: 0,
