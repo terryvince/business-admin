@@ -12,13 +12,18 @@ async function postLogin({ username, password }) {
 }
 
 //订单列表
+
+async function withdrawList(form) {
+  form.map = 'merchant_withdraw';
+  return await http.post("merchant.php", form);
+}
+
 function orderList(page, size, search) {
   return http({
     url: `merchant.php?map=merchant_order&page=${page}&size=${size}`,
     method: 'post',
     data: search
   })
-
 }
 //检测核销码是否能被核销
 function checkTicket(data) {
@@ -45,4 +50,6 @@ function verifyList(page, size, data) {
     data
   })
 }
-export { postLogin, orderList, checkTicket, verifyTicket, verifyList };
+
+export { postLogin, orderList, checkTicket, verifyTicket, withdrawList, verifyList };
+

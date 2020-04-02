@@ -9,14 +9,16 @@
     >
       <el-form-item>
         <span>可申请提现金额：1800.00</span>
-        <el-button class="left-20" type="primary" @click="onSubmit"
+        <el-button class="left-20" type="primary" @click="withdrawAmount"
           >申请提现</el-button
         >
       </el-form-item>
       <el-form-item class="left-20">
-        <el-select v-model="form.region" placeholder="提现状态">
-          <el-option label="待审核" value="shanghai"></el-option>
-          <el-option label="已打款" value="beijing"></el-option>
+        <el-select v-model="form.status" placeholder="提现状态">
+          <el-option label="审核未通过" value="-1"></el-option>
+          <el-option label="待审核" value="1"></el-option>
+          <el-option label="已打款" value="2"></el-option>
+          <el-option label="等待财务打款" value="3"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item>
@@ -35,24 +37,18 @@
           <span>{{ scope.$index + 1 }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="name" label="商品名" width="180"></el-table-column>
-      <el-table-column
-        prop="goodsType"
-        label="商品类型"
-        width="180"
-      ></el-table-column>
-      <el-table-column prop="price" label="结算价"> </el-table-column>
-      <el-table-column prop="sale" label="已售"> </el-table-column>
-      <el-table-column prop="create_at" label="创建时间"> </el-table-column>
+      <el-table-column prop="w_amount" label="申请提现金额" width="180"></el-table-column>
+      <el-table-column prop="w_rate" label="费率"> </el-table-column>
+      <el-table-column prop="rate_price" label="手续费"> </el-table-column>
+      <el-table-column prop="w_real_amount" label="实际结算金额"> </el-table-column>
+      <el-table-column prop="w_status" label="提现状态"> </el-table-column>
+      <el-table-column prop="w_create_time" label="申请时间"> </el-table-column>
       <el-table-column label="操作">
         <template>
-          <el-link @click="withdrawProduct" type="primary">提现产品</el-link>
-          <el-link
-            type="primary"
-            @click="dialogTableVisible = true"
-            style="margin-left:10px"
-            >查看详情</el-link
-          >
+          <el-link type="primary"
+                   @click="dialogTableVisible = true"
+                  >提现产品</el-link>
+          <el-link   style="margin-left:10px" type="primary"> 查看详情</el-link >
         </template>
       </el-table-column>
     </el-table>
@@ -60,27 +56,30 @@
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        :current-page.sync="currentPage3"
-        :page-size="100"
-        layout="prev, pager, next, jumper"
-        :total="1000"
+        :current-page.sync="page"
+        :page-size="10"
+        :page-sizes="[10,20,50]"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="total"
       >
       </el-pagination>
     </div>
     <!-- 查看详情弹框 -->
-    <el-dialog title="收货地址" :visible.sync="dialogTableVisible">
+    <el-dialog title="提现产品" :visible.sync="dialogTableVisible">
       <el-table :data="gridData">
         <el-table-column
           property="date"
-          label="日期"
+          label="商品名称"
           width="150"
         ></el-table-column>
         <el-table-column
           property="name"
-          label="姓名"
-          width="200"
+          label="核销码"
+          width="80"
         ></el-table-column>
-        <el-table-column property="address" label="地址"></el-table-column>
+        <el-table-column property="address" label="核销/发货时间"></el-table-column>
+        <el-table-column property="address" label="结算价格"></el-table-column>
+        <el-table-column property="address" label="核销人/发货人"></el-table-column>
       </el-table>
     </el-dialog>
   </div>
@@ -96,30 +95,16 @@
 </style>
 
 <script>
-// @ is an alias to /src
-
+import {withdrawList} from "@/servers/request";
 export default {
   name: "withdraw",
   data: function() {
     return {
-      form: { goodsName: "", goodsType: "", date1: "", date2: "" },
-      currentPage3: 5,
-      list: [
-        {
-          col1: "麻辣鱼",
-          goodsType: "物流商品",
-          price: "96.00",
-          sale: "200",
-          create_at: "2019-11-18 17:08:52"
-        },
-        {
-          name: "麻辣鱼",
-          goodsType: "物流商品",
-          price: "96.00",
-          sale: "200",
-          create_at: "2019-11-18 17:08:52"
-        }
-      ],
+      form: { status: ""},
+      page: 1,
+      size: 10,
+      total: 0,
+      list: [],
       gridData: [
         {
           date: "2016-05-02",
@@ -145,9 +130,27 @@ export default {
       dialogTableVisible: false
     };
   },
+  created() {
+    this.getWithdrawList();
+  },
   components: {},
   methods: {
-    withdrawProduct() {
+    getWithdrawList() {
+      this.form.page = this.page;
+      this.form.page_siz = this.size;
+      withdrawList(this.form).then(response => {
+        const resp = response.data;
+        if (resp.ec !== 200) {
+          this.$message.error(resp.em);
+          return false;
+        }
+        this.list = resp.data.list;
+        this.page = resp.data.page;
+        this.total = parseInt(resp.data.count);
+      });
+    },
+    // 申请提现
+    withdrawAmount() {
       this.$confirm(
         "确定要申请提现1800.00吗？本次手续费千分之七（12.6），实际到账1787.4",
         "提示",
@@ -170,14 +173,14 @@ export default {
           });
         });
     },
-    onSubmit() {
-      console.log("11");
-    },
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
+      this.page = 1;
+      this.size = val;
+      this.getWithdrawList();
     },
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
+      this.page = val;
+      this.getWithdrawList();
     }
   }
 };

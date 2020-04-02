@@ -105,6 +105,7 @@
 <script>
 // @ is an alias to /src
 
+import { orderList } from "@/servers/request";
 export default {
   name: "order",
   data: function() {
