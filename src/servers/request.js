@@ -63,14 +63,24 @@ function goodsList(page,size,data){
     data
   })
 }
+
+//提现详情
+function withdrawDetail(id){
+  return http({
+    url: `merchant.php?map=merchant_detail&w_id=${id}`,
+    method: 'get',
+  })
+}
 export {
-  postLogin,
-  orderList,
-  checkTicket,
-  verifyTicket,
-  withdrawList,
-  withdrawApply,withdrawProduct,
-  verifyList,
-  goodsList
+  postLogin, //登陆
+  orderList, //订单列表
+  checkTicket, //检测核销码
+  verifyTicket, //快捷核销
+  withdrawList, //提现列表
+  withdrawApply, //申请提现
+  withdrawProduct, //提现产品
+  verifyList, // 核销记录
+  goodsList, //商品列表
+  withdrawDetail //提现详情
 };
 
