@@ -8,21 +8,18 @@
       class="flex-main-start"
     >
       <el-form-item>
-        <el-input v-model="search.goodsName" placeholder="商品名称"></el-input>
+        <el-input v-model="search.keyword" placeholder="商品名称"></el-input>
       </el-form-item>
       <el-form-item label="核销时间">
-        <el-col :span="11">
-          <el-date-picker
-            type="date"
-            placeholder="选择日期"
-            v-model="search.date1"
-            style="width: 100%;"
-          ></el-date-picker>
-        </el-col>
-        <el-col class="line" :span="2">-</el-col>
-        <el-col :span="11">
-          <el-time-picker placeholder="选择时间" v-model="search.date2" style="width: 100%;"></el-time-picker>
-        </el-col>
+        <el-date-picker
+          v-model="search.timeRange"
+          type="daterange"
+          range-separator="至"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+          format="yyyy-MM-dd"
+          value-format="yyyy-MM-dd"
+        ></el-date-picker>
       </el-form-item>
       <el-form-item>
         <el-button class="left-20" type="primary" @click="onSubmit">搜索</el-button>
@@ -36,13 +33,13 @@
           <span>{{ scope.$index + 1 }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="name" label="商品名称" width="180"></el-table-column>
-      <el-table-column prop="goodsType" label="核销码" width="100"></el-table-column>
-      <el-table-column prop="price" label="核销人" width="180"></el-table-column>
-      <el-table-column prop="sale" label="创建时间" width="180"></el-table-column>
-      <el-table-column prop="create_at" label="核销时间" width="180"></el-table-column>
-      <el-table-column prop="create_at" label="核销码有效期"></el-table-column>
-      <el-table-column prop="create_at" label="所属订单" ></el-table-column>
+      <el-table-column prop="g_name" label="商品名称" width="180"></el-table-column>
+      <el-table-column prop="tv_code" label="核销码" width="100"></el-table-column>
+      <el-table-column prop="ms_name" label="核销人" width="180"></el-table-column>
+      <el-table-column prop="gt_createtime" label="创建时间" width="180"></el-table-column>
+      <el-table-column prop="verify_time" label="核销时间" width="180"></el-table-column>
+      <el-table-column prop="time_between" label="核销码有效期"></el-table-column>
+      <el-table-column prop="t_tid" label="所属订单"></el-table-column>
     </el-table>
     <div class="block top-20">
       <el-pagination
@@ -73,27 +70,43 @@ export default {
   name: "checkRecorder",
   data: function() {
     return {
-      search: { goodsName: "", goodsType: "", date1: "", date2: "" },
+      search: { keyword: "",timeRange:''},
       currentPage3: 5,
       page: 1,
       size: 10,
       total: 0,
-      list: [
-        {
-          col1: "麻辣鱼",
-          goodsType: "物流商品",
-          price: "96.00",
-          sale: "200",
-          create_at: "2019-11-18 17:08:52"
-        },
-        {
-          name: "麻辣鱼",
-          goodsType: "物流商品",
-          price: "96.00",
-          sale: "200",
-          create_at: "2019-11-18 17:08:52"
-        }
-      ]
+      list: [],
+      pickerOptions: {
+        shortcuts: [
+          {
+            text: "最近一周",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit("pick", [start, end]);
+            }
+          },
+          {
+            text: "最近一个月",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+              picker.$emit("pick", [start, end]);
+            }
+          },
+          {
+            text: "最近三个月",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+              picker.$emit("pick", [start, end]);
+            }
+          }
+        ]
+      }
     };
   },
   components: {},
@@ -102,7 +115,7 @@ export default {
   },
   methods: {
     onSubmit() {
-      console.log("11");
+      this.getList()
     },
     getList() {
       verifyList(this.page, this.size, this.search).then(response => {
@@ -111,13 +124,18 @@ export default {
           this.$message.error(resp.em);
           return;
         }
+        this.list = resp.data.list;
+        this.total = resp.data.count;
       });
     },
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
+      this.page = 1;
+      this.size = val;
+      this.getList();
     },
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
+      this.page = val;
+      this.getList();
     }
   }
 };
