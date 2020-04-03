@@ -9,6 +9,13 @@ async function postLogin({ username, password }) {
   });
   return response;
 }
+// 登录
+async function logoutLogin() {
+  const response = await http.post("merchant.php", {
+    map: "merchant_logout"
+  });
+  return response;
+}
 async function withdrawList(form) {
   // 提现列表
   form.map = "merchant_withdraw";
@@ -102,6 +109,7 @@ function changeDeliver(data){
 
 export {
   postLogin, //登陆
+  logoutLogin, // 退出登录
   orderList, //订单列表
   checkTicket, //检测核销码
   verifyTicket, //快捷核销

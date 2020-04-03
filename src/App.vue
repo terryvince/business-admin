@@ -1,6 +1,7 @@
 <script>
 import asideBar from "./components/AsideBar";
 import { mapMutations, mapGetters } from "vuex";
+import { logoutLogin } from "@/servers/request";
 export default {
   components: { asideBar },
   data() {
@@ -20,8 +21,13 @@ export default {
       console.log(data);
     },
     logout() {
-      this.toggleLogin();
-      this.$router.replace({ path: "/login" });
+      // 退出登录
+      logoutLogin().then(res => {
+        if (res.data.ec == 200) {
+          this.toggleLogin();
+          this.$router.replace({ path: "/login" });
+        }
+      });
     },
     ...mapMutations({
       toggleLayout: "toggleLayout",
