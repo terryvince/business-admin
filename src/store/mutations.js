@@ -1,5 +1,5 @@
 const mutations = {
-  // 控制主体区域的加载图标显示 false 不显示加载，true显示加载
+  // 控制整页加载显示 false 不显示加载，true显示加载
   updateLoading(state, isLoading) {
     state.mainLoading = isLoading;
   },

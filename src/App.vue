@@ -20,7 +20,6 @@ export default {
       console.log(data);
     },
     logout() {
-      console.log(1);
       this.toggleLogin();
       this.$router.replace({ path: "/login" });
     },
