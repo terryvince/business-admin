@@ -170,6 +170,12 @@ Vue.prototype.$message = Message;
 
 Vue.config.productionTip = false;
 
+// 每次、请求时验证是否需要验证登录
+/*router.beforeEach((to, from, next) => {
+  console.log(to.path);
+  next();
+});*/
+
 export default new Vue({
   router,
   store,

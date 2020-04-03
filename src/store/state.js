@@ -32,7 +32,7 @@ export default {
     },
     {
       label: "核销记录",
-      name: "checkRecorder"
+      name: "verifyRecord"
     },
     {
       label: "提现记录",
@@ -40,7 +40,7 @@ export default {
     },
     {
       label: "快捷核销",
-      name: "shortcutCheck"
+      name: "quickVerify"
     }
   ]
 };
