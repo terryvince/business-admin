@@ -55,7 +55,7 @@
       <el-table-column prop="t_tid" label="订单号" width="200px"></el-table-column>
       <el-table-column prop="to_title" label="订单商品" width="180px"></el-table-column>
       <el-table-column prop="goods_type_txt" label="商品类型" width="90"></el-table-column>
-      <el-table-column label="商品数量/核销码"  width="140">
+      <el-table-column label="商品数量/核销码" width="140">
         <template slot-scope="scope">
           <div>
             <span>
@@ -67,11 +67,11 @@
         </template>
       </el-table-column>
       <el-table-column prop="g_seller_price" label="结算价" width="100"></el-table-column>
-      <el-table-column  label="收货信息">
+      <el-table-column label="收货信息">
         <template slot-scope="scope">
           <div>
             <p>昵称: {{scope.row.t_buyer_nick}}</p>
-            <p>电话: {{scope.row.ma_phone}}</p>
+            <p>电话: {{scope.row.t_phone_ext}}</p>
             <p>地址: {{scope.row.g_verify_type == 'code' ? '无需地址' : scope.row.t_address_ext}}</p>
           </div>
         </template>
@@ -82,12 +82,23 @@
       <el-table-column label="操作">
         <template slot-scope="scope">
           <div>
-            <el-link v-if="scope.row.g_verify_type == 'ship'" type="primary">发货</el-link>
             <el-link
-              v-if="scope.row.g_verify_type == 'ship'"
+              v-if="scope.row.g_verify_type == 'ship'  && scope.row.t_status == 3"
+              @click="getShipping(scope.row.t_tid)"
+              type="primary"
+            >发货</el-link>
+            <el-link
+              v-if="scope.row.g_verify_type == 'ship' && scope.row.t_status == 4"
               type="primary"
               style="margin-left:10px"
+              @click="showEditDialog(scope.row)"
             >修改收货信息</el-link>
+            <el-link
+              v-if="scope.row.g_verify_type == 'ship' && scope.row.t_status == 4"
+              type="primary"
+              style="margin-left:10px"
+              @click="showShipping(scope.row)"
+            >查看物流信息</el-link>
           </div>
         </template>
       </el-table-column>
@@ -103,6 +114,62 @@
         :total="total"
       ></el-pagination>
     </div>
+    <!-- 发货dialog -->
+    <el-dialog title="发货" :visible.sync="shipping_dialog" width="30%" center>
+      <el-form ref="dialogForm" :model="dialogForm" label-width="80px">
+        <el-form-item label="物流公司">
+          <el-select v-model="dialogForm.company" placeholder="物流公司">
+            <el-option v-for="(item,index) in shipping" :key="index" :value="item"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="物流单号" prop="code">
+          <el-input v-model="dialogForm.code" placeholder="物流单号"></el-input>
+        </el-form-item>
+        <el-form-item label="备注信息" prop="expressNote">
+          <el-input v-model="dialogForm.expressNote" placeholder="备注信息"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="shipping_dialog = false">关闭</el-button>
+        <el-button type="primary" @click="submitShipping()">确认发货</el-button>
+      </span>
+    </el-dialog>
+    <!-- 修改地址电话dialog -->
+    <el-dialog title="修改收货信息" :visible.sync="edit_dialog" width="30%" center>
+      <el-form ref="dialog_address" :model="dialog_address" label-width="80px">
+        <el-form-item label="收货地址" prop="address">
+          <el-input v-model="dialog_address.address" placeholder="收货地址"></el-input>
+        </el-form-item>
+        <el-form-item label="电话" prop="phone">
+          <el-input v-model="dialog_address.phone" placeholder="电话"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="edit_dialog = false">关闭</el-button>
+        <el-button type="primary" @click="changeReceive()">确认修改</el-button>
+      </span>
+    </el-dialog>
+
+    <!-- 查看物流dialog -->
+    <el-dialog title="物流信息" :visible.sync="shipping_detail_dialog" width="30%" center>
+      <el-form label-width="120px">
+        <el-form-item label="物流公司：" >
+          <span>{{shipping_detail.company}}</span>
+        </el-form-item>
+        <el-form-item label="物流单号：" >
+          <span>{{shipping_detail.shipping_no}}</span>
+        </el-form-item>
+        <el-form-item label="发货时间：" >
+          <span>{{shipping_detail.express_time}}</span>
+        </el-form-item>
+        <el-form-item label="发货备注：" >
+          <span>{{shipping_detail.express_note}}</span>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="shipping_detail_dialog = false">关闭</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -127,7 +194,12 @@ const orderStatus = [
   { type: "confirm", name: "已收货" },
   { type: "complete", name: "已完成" }
 ];
-import { orderList } from "@/servers/request";
+import {
+  orderList,
+  shippingList,
+  deliver,
+  changeDeliver
+} from "@/servers/request";
 export default {
   name: "order",
   data: function() {
@@ -144,36 +216,26 @@ export default {
       size: 10,
       list: [],
       orderStatus,
-      pickerOptions: {
-        shortcuts: [
-          {
-            text: "最近一周",
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-              picker.$emit("pick", [start, end]);
-            }
-          },
-          {
-            text: "最近一个月",
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-              picker.$emit("pick", [start, end]);
-            }
-          },
-          {
-            text: "最近三个月",
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-              picker.$emit("pick", [start, end]);
-            }
-          }
-        ]
+      shipping_dialog: false,
+      shipping_detail_dialog: false,
+      shipping_detail: {
+        company: "",
+        shipping_no: "",
+        express_time: "",
+        express_note: ""
+      },
+      edit_dialog: false,
+      shipping: [],
+      dialogForm: {
+        code: "",
+        company: "",
+        tid: "",
+        express: "",
+        expressNote: ""
+      },
+      dialog_address: {
+        address: "",
+        phone: ""
       }
     };
   },
@@ -185,15 +247,18 @@ export default {
     onSubmit() {
       this.getList();
     },
+
     handleSizeChange(val) {
       this.page = 1;
       this.size = val;
       this.getList();
     },
+
     handleCurrentChange(val) {
       this.page = val;
       this.getList();
     },
+
     getList() {
       orderList(this.page, this.size, this.form).then(response => {
         const resp = response.data;
@@ -204,6 +269,81 @@ export default {
         this.list = resp.data.list;
         this.total = resp.data.count;
       });
+    },
+
+    getShipping(tid) {
+      this.$refs["dialogForm"].resetFields();
+      this.dialogForm.tid = tid;
+      //这里之后改为vuex存储状态，控制请求
+      if (this.shipping.length == 0) {
+        shippingList().then(response => {
+          const resp = response.data;
+          if (resp.ec !== 200) {
+            this.$message.error(resp.em);
+            return false;
+          }
+          this.shipping = resp.data;
+        });
+      }
+      this.shipping_dialog = true;
+    },
+
+    submitShipping() {
+      for (var a in this.shipping) {
+        if (this.shipping[a] == this.dialogForm.company) {
+          this.dialogForm.express = a;
+          break;
+        }
+      }
+
+      deliver(this.dialogForm).then(response => {
+        const resp = response.data;
+        if (resp.ec !== 200) {
+          this.$message.error(resp.em);
+          return false;
+        }
+
+        this.getList();
+        this.shipping_dialog = false;
+      });
+    },
+
+    showEditDialog(row) {
+      this.dialog_address.id = row.t_id;
+      this.dialog_address.address = row.t_address_ext;
+      this.dialog_address.phone = row.t_phone_ext;
+      this.edit_dialog = true;
+    },
+
+    changeReceive() {
+      this.$confirm("确定要修改吗", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(() => {
+        changeDeliver(this.dialog_address).then(response => {
+          const resp = response.data;
+          if (resp.ec !== 200) {
+            this.$message.error(resp.em);
+            return false;
+          }
+          this.edit_dialog = false;
+          this.$message({
+            message: "修改成功",
+            type: "success"
+          });
+
+          this.getList();
+        });
+      });
+    },
+
+    showShipping(row) {
+      this.shipping_detail_dialog = true;
+      this.shipping_detail.company = row.t_express_company;
+      this.shipping_detail.shipping_no = row.t_express_code;
+      this.shipping_detail.express_time = row.t_express_time;
+      this.shipping_detail.express_note = row.t_express_note;
     }
   }
 };
