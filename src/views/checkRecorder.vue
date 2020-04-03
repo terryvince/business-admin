@@ -104,6 +104,12 @@ export default {
     };
   },
   components: {},
+  created() {
+    // this.$store.commit("updateLoading", true);//触发加载状态
+  },
+  mounted() {
+    // this.$store.commit("updateLoading", false);//关闭加载状态
+  },
   methods: {
     onSubmit() {
       console.log("11");

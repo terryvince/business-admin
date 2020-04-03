@@ -11,7 +11,8 @@ export default {
   computed: {
     ...mapGetters({
       layout: "layout",
-      userInfo: "userInfo"
+      userInfo: "userInfo",
+      mainLoading: "mainLoading"
     })
   },
   methods: {
@@ -24,7 +25,7 @@ export default {
       this.$router.replace({ path: "/login" });
     },
     ...mapMutations({
-      toggleLayout: "toggleLayout", // 将 `this.add()` 映射为 `this.$store.commit('increment')`
+      toggleLayout: "toggleLayout",
       toggleLogin: "toggleLogin"
     })
   }
@@ -52,7 +53,18 @@ export default {
         <el-aside v-show="layout.isShowAside" width="200px">
           <aside-bar />
         </el-aside>
-        <el-main>
+        <el-main v-loading="mainLoading">
+          <div class="flex-main-start" style="margin-bottom:15px">
+            <i class="el-icon-map-location"></i>
+            <el-breadcrumb
+              separator-class="el-icon-arrow-right"
+              class="left-10"
+            >
+              <el-breadcrumb-item class="fs-12">{{
+                $route.meta.title
+              }}</el-breadcrumb-item>
+            </el-breadcrumb>
+          </div>
           <router-view />
         </el-main>
       </el-container>
