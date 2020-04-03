@@ -74,6 +74,32 @@ function withdrawDetail(id) {
     method: "get"
   });
 }
+
+//获取物流列表
+function shippingList(){
+  return http({
+    url: `merchant.php?map=get_deliver`,
+    method: 'get',
+  })
+}
+
+function deliver(data){
+  return http({
+    url: `merchant.php?map=deliver_order`,
+    method: 'post',
+    data
+  })
+}
+
+function changeDeliver(data){
+  return http({
+    url: `merchant.php?map=change_deliver`,
+    method: 'post',
+    data
+  })
+}
+
+
 export {
   postLogin, //登陆
   orderList, //订单列表
@@ -84,5 +110,8 @@ export {
   withdrawProduct, //提现产品
   verifyList, // 核销记录
   goodsList, //商品列表
-  withdrawDetail //提现详情
+  withdrawDetail, //提现详情
+  shippingList, //物流列表
+  deliver, //发货
+  changeDeliver //修改收货地址
 };
