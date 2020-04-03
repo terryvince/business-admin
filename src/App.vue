@@ -34,7 +34,12 @@ export default {
 
 <template>
   <div id="app">
-    <el-container>
+    <el-container
+      v-loading="mainLoading"
+      element-loading-text="拼命加载中"
+      element-loading-spinner="el-icon-loading"
+      element-loading-background="rgba(0, 0, 0, 0.8)"
+    >
       <el-header v-show="layout.isShowHeader" class="flex-main-between">
         <div class="left-scope fs-20">商户管理系统</div>
         <div class="role flex-main-start">
@@ -53,7 +58,7 @@ export default {
         <el-aside v-show="layout.isShowAside" width="200px">
           <aside-bar />
         </el-aside>
-        <el-main v-loading="mainLoading">
+        <el-main>
           <div class="flex-main-start" style="margin-bottom:15px">
             <i class="el-icon-map-location"></i>
             <el-breadcrumb

@@ -105,6 +105,7 @@ router.beforeEach((to, from, next) => {
     return;
   }
   if (isLogin) {
+    // store.commit("updateLoading", true); //启用整页加载，跳转页面先出现加载状态，页面内修改为false关闭加载
     store.commit("updateCurrentNodeName", to.name); //设置菜单选中状态
     next();
   } else {
