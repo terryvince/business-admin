@@ -10,5 +10,8 @@ export default {
   },
   userInfo: state => {
     return state.userInfo;
+  },
+  mainLoading: state => {
+    return state.mainLoading;
   }
 };

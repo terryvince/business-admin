@@ -1,4 +1,8 @@
 const mutations = {
+  // 控制主体区域的加载图标显示 false 不显示加载，true显示加载
+  updateLoading(state, isLoading) {
+    state.mainLoading = isLoading;
+  },
   toggleLayout(state) {
     // 切换布局状态，控制侧边栏和头部显示隐藏
     state.layout.isShowAside = !state.layout.isShowAside;

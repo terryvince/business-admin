@@ -15,6 +15,7 @@ export default {
   layout: layout,
   isLogin: isLogin, // 是否登录
   userInfo: userInfo,
+  mainLoading: false,
   menus: [
     //菜单
     {
