@@ -99,16 +99,15 @@ const whiteList = ["login", "notFound"];
 
 router.beforeEach((to, from, next) => {
   const { isLogin } = store.state;
+  document.title = to.meta.title;
   if (whiteList.includes(to.name)) {
-    document.title = to.meta.title;
     next();
     return;
   }
   if (isLogin) {
-    document.title = to.meta.title;
+    store.commit("updateCurrentNodeName", to.name); //设置菜单选中状态
     next();
   } else {
-    document.title = to.meta.title;
     next({ path: "/login", replace: true });
   }
 });

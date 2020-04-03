@@ -16,6 +16,7 @@ export default {
   isLogin: isLogin, // 是否登录
   userInfo: userInfo,
   mainLoading: false,
+  currentNodeName: "count", //用于设置菜单的选中
   menus: [
     //菜单
     {

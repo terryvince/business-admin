@@ -1,7 +1,7 @@
 <template>
   <div class="login flex-main-center">
     <div class="login-wrap">
-      <div class="fs-34">商户系统登录</div>
+      <div class="fs-34 txt-bold">商户系统登录</div>
       <el-form
         :label-position="labelPosition"
         label-width="60px"

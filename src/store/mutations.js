@@ -3,6 +3,10 @@ const mutations = {
   updateLoading(state, isLoading) {
     state.mainLoading = isLoading;
   },
+  // 设置菜单栏的选中状态 by name
+  updateCurrentNodeName(state, name) {
+    state.currentNodeName = name;
+  },
   toggleLayout(state) {
     // 切换布局状态，控制侧边栏和头部显示隐藏
     state.layout.isShowAside = !state.layout.isShowAside;

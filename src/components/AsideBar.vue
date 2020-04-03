@@ -12,7 +12,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["menus"])
+    ...mapGetters(["menus", "currentNodeName"])
   },
   methods: {
     handleNodeClick(data) {
@@ -27,6 +27,7 @@ export default {
     :data="menus"
     :props="defaultProps"
     node-key="name"
+    :current-node-key="currentNodeName"
     ref="tree"
     accordion
     @node-click="handleNodeClick"

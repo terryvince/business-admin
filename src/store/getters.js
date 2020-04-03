@@ -13,5 +13,8 @@ export default {
   },
   mainLoading: state => {
     return state.mainLoading;
+  },
+  currentNodeName: state => {
+    return state.currentNodeName;
   }
 };
