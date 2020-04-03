@@ -18,6 +18,7 @@
           <el-input
             v-model="loginForm.password"
             suffix-icon="el-icon-s-cooperation"
+            @keyup.enter.native="onSubmit"
           ></el-input>
         </el-form-item>
         <el-form-item size="medium">
