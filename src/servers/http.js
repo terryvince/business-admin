@@ -33,6 +33,12 @@ http.interceptors.request.use(
 http.interceptors.response.use(
   function(response) {
     // 对响应数据做点什么
+    if (
+      typeof response.data == "string" &&
+      response.data.includes("<!DOCTYPE html>") //捕获返回状态码为200，但返回的无效内容，服务器的报错html
+    ) {
+      response.data = { em: `请求路径出错：${response.config.url}`, code: 500 };
+    }
     return response;
   },
   function(error) {

@@ -11,7 +11,9 @@
         <el-input v-model="form.keyword" placeholder="商品名称"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button class="left-20" type="primary" @click="onSubmit">搜索</el-button>
+        <el-button class="left-20" type="primary" @click="onSubmit"
+          >搜索</el-button
+        >
       </el-form-item>
     </el-form>
     <el-divider direction="horizontal"></el-divider>
@@ -21,10 +23,16 @@
           <span>{{ scope.$index + 1 }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="g_name" label="商品名" width="180"></el-table-column>
-      <el-table-column  label="商品类型" width="180">
-          <template slot-scope="scope">
-                <span>{{ scope.row.g_verify_type == 'code' ? '核销商品' : '物流商品' }}</span>
+      <el-table-column
+        prop="g_name"
+        label="商品名"
+        width="180"
+      ></el-table-column>
+      <el-table-column label="商品类型" width="180">
+        <template slot-scope="scope">
+          <span>{{
+            scope.row.g_verify_type == "code" ? "核销商品" : "物流商品"
+          }}</span>
         </template>
       </el-table-column>
       <el-table-column prop="g_seller_price" label="结算价"></el-table-column>
@@ -68,7 +76,7 @@ export default {
   },
   components: {},
   created() {
-      this.getList()
+    this.getList();
   },
   methods: {
     onSubmit() {
@@ -82,8 +90,8 @@ export default {
           this.$message.error(resp.em);
           return false;
         }
-        this.list = resp.data.list
-        this.total = resp.data.count
+        this.list = resp.data.list;
+        this.total = resp.data.count;
       });
     },
     handleSizeChange(val) {

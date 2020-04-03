@@ -79,8 +79,7 @@ const routes = [
     meta: {
       title: "快捷核销"
     },
-    component: () =>
-      import("@/views/ticket/quick-verify.vue")
+    component: () => import("@/views/ticket/quick-verify.vue")
   },
   {
     path: "*",

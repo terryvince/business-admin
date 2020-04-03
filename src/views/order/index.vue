@@ -17,7 +17,10 @@
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-input v-model="form.phone" placeholder="订单号/手机号/昵称/姓名"></el-input>
+        <el-input
+          v-model="form.phone"
+          placeholder="订单号/手机号/昵称/姓名"
+        ></el-input>
       </el-form-item>
       <el-form-item>
         <el-select v-model="form.status" placeholder="订单状态">
@@ -41,8 +44,12 @@
         ></el-date-picker>
       </el-form-item>
       <el-form-item>
-        <el-button class="left-20" type="primary" @click="onSubmit">搜索</el-button>
-        <el-button class="left-20" type="primary" @click="onSubmit">导出到Excel</el-button>
+        <el-button class="left-20" type="primary" @click="onSubmit"
+          >搜索</el-button
+        >
+        <el-button class="left-20" type="primary" @click="onSubmit"
+          >导出到Excel</el-button
+        >
       </el-form-item>
     </el-form>
     <el-divider direction="horizontal"></el-divider>
@@ -52,27 +59,50 @@
           <span>{{ scope.$index + 1 }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="t_tid" label="订单号" width="200px"></el-table-column>
-      <el-table-column prop="to_title" label="订单商品" width="180px"></el-table-column>
-      <el-table-column prop="goods_type_txt" label="商品类型" width="90"></el-table-column>
-      <el-table-column label="商品数量/核销码"  width="140">
+      <el-table-column
+        prop="t_tid"
+        label="订单号"
+        width="200px"
+      ></el-table-column>
+      <el-table-column
+        prop="to_title"
+        label="订单商品"
+        width="180px"
+      ></el-table-column>
+      <el-table-column
+        prop="goods_type_txt"
+        label="商品类型"
+        width="90"
+      ></el-table-column>
+      <el-table-column label="商品数量/核销码" width="140">
         <template slot-scope="scope">
           <div>
             <span>
               <p>核销剩余:{{ scope.row.ticket_valid }}</p>
-              <p>已被核销:{{scope.row.ticket_used}}</p>
-              <p>商品数量:{{scope.row.to_num}}</p>
+              <p>已被核销:{{ scope.row.ticket_used }}</p>
+              <p>商品数量:{{ scope.row.to_num }}</p>
             </span>
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="g_seller_price" label="结算价" width="100"></el-table-column>
-      <el-table-column  label="收货信息">
+      <el-table-column
+        prop="g_seller_price"
+        label="结算价"
+        width="100"
+      ></el-table-column>
+      <el-table-column label="收货信息">
         <template slot-scope="scope">
           <div>
-            <p>昵称: {{scope.row.t_buyer_nick}}</p>
-            <p>电话: {{scope.row.ma_phone}}</p>
-            <p>地址: {{scope.row.g_verify_type == 'code' ? '无需地址' : scope.row.t_address_ext}}</p>
+            <p>昵称: {{ scope.row.t_buyer_nick }}</p>
+            <p>电话: {{ scope.row.ma_phone }}</p>
+            <p>
+              地址:
+              {{
+                scope.row.g_verify_type == "code"
+                  ? "无需地址"
+                  : scope.row.t_address_ext
+              }}
+            </p>
           </div>
         </template>
       </el-table-column>
@@ -82,12 +112,15 @@
       <el-table-column label="操作">
         <template slot-scope="scope">
           <div>
-            <el-link v-if="scope.row.g_verify_type == 'ship'" type="primary">发货</el-link>
+            <el-link v-if="scope.row.g_verify_type == 'ship'" type="primary"
+              >发货</el-link
+            >
             <el-link
               v-if="scope.row.g_verify_type == 'ship'"
               type="primary"
               style="margin-left:10px"
-            >修改收货信息</el-link>
+              >修改收货信息</el-link
+            >
           </div>
         </template>
       </el-table-column>
