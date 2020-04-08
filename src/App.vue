@@ -23,10 +23,11 @@ export default {
     logout() {
       // 退出登录
       logoutLogin().then(res => {
-        if (res.data.ec == 200) {
+        console.log(res);
+        //if (res.data.ec == 200) {
           this.toggleLogin();
           this.$router.replace({ path: "/login" });
-        }
+        //}
       });
     },
     ...mapMutations({
