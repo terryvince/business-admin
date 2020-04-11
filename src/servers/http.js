@@ -2,8 +2,8 @@ import axios from "axios";
 import qs from "qs";
 import store from "../store";
 const http = axios.create({
-  //   baseURL: "http://shopping.zhjl.link/",
-  baseURL: "/api/", //使用代理跨域
+  baseURL: "http://shopping.zhjl.link/",
+  //baseURL: "/api/", //使用代理跨域
   timeout: 1000 * 60
 });
 http.defaults.headers.post["Content-Type"] =
