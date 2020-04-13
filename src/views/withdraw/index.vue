@@ -22,7 +22,7 @@
       </el-form-item>
       <el-form-item>
         <el-button class="left-20" type="primary" @click="getWithdrawList">搜索</el-button>
-        <el-button class="left-20" type="primary" @click="getWithdrawList">导出到Excel</el-button>
+        <el-button class="left-20" type="primary" @click="exportExcel">导出到Excel</el-button>
       </el-form-item>
     </el-form>
     <el-divider direction="horizontal"></el-divider>
@@ -153,6 +153,7 @@ import {
   withdrawProduct,
   withdrawDetail
 } from "@/servers/request";
+import { export_json_to_excel } from "@/assets/Export2Excel.js";
 export default {
   name: "withdraw",
   data: function() {
@@ -177,6 +178,38 @@ export default {
   },
   components: {},
   methods: {
+    exportExcel() {
+      const tHeader = [
+        "申请提现金额",
+        "费率",
+        "手续费",
+        "实际结算金额",
+        "提现状态",
+        "申请时间"
+      ]; //excel表头
+      const data = this.formatJson(this.list);
+      console.log(export_json_to_excel);
+      export_json_to_excel({
+        header: tHeader,
+        data,
+        filename: +new Date() + this.$route.meta.title,
+        autoWidth: true,
+        bookType: "xlsx"
+      });
+    },
+
+    formatJson(jsonData) {
+      return jsonData.map(v => {
+        let arr = [];
+        arr.push(v.w_amount);
+        arr.push(v.w_rate);
+        arr.push(v.rate_price);
+        arr.push(v.w_real_amount);
+        arr.push(v.w_status);
+        arr.push(v.w_create_time);
+        return arr;
+      });
+    },
     // 申请列表
     getWithdrawList() {
       this.location = true;

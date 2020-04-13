@@ -2484,7 +2484,7 @@ caseless@~0.12.0:
   resolved "https://registry.yarnpkg.com/caseless/-/caseless-0.12.0.tgz#1b681c21ff84033c826543090689420d187151dc"
   integrity sha1-G2gcIf+EAzyCZUMJBolCDRhxUdw=
 
-cfb@>=0.10.0:
+cfb@>=0.10.0, cfb@^1.1.4:
   version "1.1.4"
   resolved "https://registry.yarnpkg.com/cfb/-/cfb-1.1.4.tgz#81fd35ede4c919d8f0962a94582e1dfaf7051e2a"
   integrity sha512-rwFkl3aFO3f+ljR27YINwC0x8vPjyiEVbYbrTCKzspEf7Q++3THdfHVgJYNUbxNcupJECrLX+L40Mjm9hm/Bgw==
@@ -2698,6 +2698,14 @@ code-point-at@^1.0.0:
   resolved "https://registry.yarnpkg.com/code-point-at/-/code-point-at-1.1.0.tgz#0d070b4d043a5bea33a2f1a40e2edb3d9a4ccf77"
   integrity sha1-DQcLTQQ6W+ozovGkDi7bPZpMz3c=
 
+codepage@~1.14.0:
+  version "1.14.0"
+  resolved "https://registry.yarnpkg.com/codepage/-/codepage-1.14.0.tgz#8cbe25481323559d7d307571b0fff91e7a1d2f99"
+  integrity sha1-jL4lSBMjVZ19MHVxsP/5HnodL5k=
+  dependencies:
+    commander "~2.14.1"
+    exit-on-epipe "~1.0.1"
+
 codepage@~1.3.6:
   version "1.3.8"
   resolved "https://registry.yarnpkg.com/codepage/-/codepage-1.3.8.tgz#4f2e5d7c0975de28f88498058dcb5afcab6a5f71"
@@ -2772,7 +2780,7 @@ commander@:
   resolved "https://registry.yarnpkg.com/commander/-/commander-5.0.0.tgz#dbf1909b49e5044f8fdaf0adc809f0c0722bdfd0"
   integrity sha512-JrDGPAKjMGSP1G0DUoaceEJ3DZgAfr/q6X7FVk4+U5KxUSKviYGM2k6zWkfyyBHy5rAtzgYJFa1ro2O9PtoxwQ==
 
-commander@2.17.x:
+commander@2.17.x, commander@~2.17.1:
   version "2.17.1"
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.17.1.tgz#bd77ab7de6de94205ceacc72f1716d29f20a77bf"
   integrity sha512-wPMUt6FnH2yzG95SA6mzjQOEKUU3aLaDEmzs1ti+1E9h+CsrZghRlqEM/EJ4KscsQVG8uNN4uVreUeT8+drlgg==
@@ -2781,6 +2789,11 @@ commander@^2.16.0, commander@^2.18.0, commander@^2.20.0:
   version "2.20.3"
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.20.3.tgz#fd485e84c03eb4881c20722ba48035e8531aeb33"
   integrity sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ==
+
+commander@~2.14.1:
+  version "2.14.1"
+  resolved "https://registry.yarnpkg.com/commander/-/commander-2.14.1.tgz#2235123e37af8ca3c65df45b026dbd357b01b9aa"
+  integrity sha512-+YR16o3rK53SmWHU3rEM3tPAh2rwb1yPcQX5irVn7mb0gXbwuCCrnkbV5+PBfETdfg1vui07nM6PCG1zndcjQw==
 
 commander@~2.19.0:
   version "2.19.0"
@@ -4267,6 +4280,11 @@ frac@0.3.1:
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/frac/-/frac-0.3.1.tgz#577677b7fdcbe6faf7c461f1801d34137cda4354"
   integrity sha1-V3Z3t/3L5vr3xGHxgB00E3zaQ1Q=
+
+frac@~1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/frac/-/frac-1.1.2.tgz#3d74f7f6478c88a1b5020306d747dc6313c74d0b"
+  integrity sha512-w/XBfkibaTl3YDqASwfDUqkna4Z2p9cFSr1aHDt0WoMTECnRfBOv2WArlZILlqgWlmdIlALXGpM2AOhEk5W3IA==
 
 fragment-cache@^0.2.1:
   version "0.2.1"
@@ -8206,6 +8224,13 @@ sprintf-js@~1.0.2:
   resolved "https://registry.yarnpkg.com/sprintf-js/-/sprintf-js-1.0.3.tgz#04e6926f662895354f3dd015203633b857297e2c"
   integrity sha1-BOaSb2YolTVPPdAVIDYzuFcpfiw=
 
+ssf@~0.10.3:
+  version "0.10.3"
+  resolved "https://registry.yarnpkg.com/ssf/-/ssf-0.10.3.tgz#8eae1fc29c90a552e7921208f81892d6f77acb2b"
+  integrity sha512-pRuUdW0WwyB2doSqqjWyzwCD6PkfxpHAHdZp39K3dp/Hq7f+xfMwNAWIi16DyrRg4gg9c/RvLYkJTSawTPTm1w==
+  dependencies:
+    frac "~1.1.2"
+
 ssf@~0.8.1:
   version "0.8.2"
   resolved "https://registry.yarnpkg.com/ssf/-/ssf-0.8.2.tgz#b9d4dc6a1c1bcf76f8abfa96d7d7656fb2abecd6"
@@ -9286,6 +9311,11 @@ wide-align@^1.1.0:
   dependencies:
     string-width "^1.0.2 || 2"
 
+wmf@~1.0.1:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/wmf/-/wmf-1.0.2.tgz#7d19d621071a08c2bdc6b7e688a9c435298cc2da"
+  integrity sha512-/p9K7bEh0Dj6WbXg4JG0xvLQmIadrner1bi45VMJTfnbVHsc7yIajZyoSoK60/dtVBs12Fm6WkUI5/3WAVsNMw==
+
 word-wrap@~1.2.3:
   version "1.2.3"
   resolved "https://registry.yarnpkg.com/word-wrap/-/word-wrap-1.2.3.tgz#610636f6b1f703891bd34771ccb17fb93b47079c"
@@ -9333,6 +9363,20 @@ ws@^6.0.0, ws@^6.2.1:
   integrity sha512-GIyAXC2cB7LjvpgMt9EKS2ldqr0MTrORaleiOno6TweZ6r3TKtoFQWay/2PceJ3RuBasOHzXNn5Lrw1X0bEjqA==
   dependencies:
     async-limiter "~1.0.0"
+
+xlsx@^0.15.6:
+  version "0.15.6"
+  resolved "https://registry.yarnpkg.com/xlsx/-/xlsx-0.15.6.tgz#461f841d6d9ea1a8375e2cd246bf23aece08a1d5"
+  integrity sha512-7vD9eutyLs65iDjNFimVN+gk/oDkfkCgpQUjdE82QgzJCrBHC4bGPH7fzKVyy0UPp3gyFVQTQEFJaWaAvZCShQ==
+  dependencies:
+    adler-32 "~1.2.0"
+    cfb "^1.1.4"
+    codepage "~1.14.0"
+    commander "~2.17.1"
+    crc-32 "~1.2.0"
+    exit-on-epipe "~1.0.1"
+    ssf "~0.10.3"
+    wmf "~1.0.1"
 
 xtend@^4.0.0, xtend@~4.0.1:
   version "4.0.2"

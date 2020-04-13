@@ -22,8 +22,12 @@
         ></el-date-picker>
       </el-form-item>
       <el-form-item>
-        <el-button class="left-20" type="primary" @click="onSubmit">搜索</el-button>
-        <el-button class="left-20" type="primary" @click="onSubmit">导出到Excel</el-button>
+        <el-button class="left-20" type="primary" @click="onSubmit"
+          >搜索</el-button
+        >
+        <el-button class="left-20" type="primary" @click="exportExcel"
+          >导出到Excel</el-button
+        >
       </el-form-item>
     </el-form>
     <el-divider direction="horizontal"></el-divider>
@@ -33,12 +37,35 @@
           <span>{{ scope.$index + 1 }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="g_name" label="商品名称" width="180"></el-table-column>
-      <el-table-column prop="tv_code" label="核销码" width="100"></el-table-column>
-      <el-table-column prop="ms_name" label="核销人" width="180"></el-table-column>
-      <el-table-column prop="gt_createtime" label="创建时间" width="180"></el-table-column>
-      <el-table-column prop="verify_time" label="核销时间" width="180"></el-table-column>
-      <el-table-column prop="time_between" label="核销码有效期"></el-table-column>
+      <el-table-column
+        prop="g_name"
+        label="商品名称"
+        width="180"
+      ></el-table-column>
+      <el-table-column
+        prop="tv_code"
+        label="核销码"
+        width="100"
+      ></el-table-column>
+      <el-table-column
+        prop="ms_name"
+        label="核销人"
+        width="180"
+      ></el-table-column>
+      <el-table-column
+        prop="gt_createtime"
+        label="创建时间"
+        width="180"
+      ></el-table-column>
+      <el-table-column
+        prop="verify_time"
+        label="核销时间"
+        width="180"
+      ></el-table-column>
+      <el-table-column
+        prop="time_between"
+        label="核销码有效期"
+      ></el-table-column>
       <el-table-column prop="t_tid" label="所属订单"></el-table-column>
     </el-table>
     <div class="block top-20">
@@ -65,12 +92,12 @@
 
 <script>
 import { verifyList } from "@/servers/request";
-
+import { export_json_to_excel } from "@/assets/Export2Excel.js";
 export default {
   name: "checkRecorder",
   data: function() {
     return {
-      search: { keyword: "",timeRange:''},
+      search: { keyword: "", timeRange: "" },
       page: 1,
       size: 10,
       total: 0,
@@ -113,8 +140,42 @@ export default {
     this.getList();
   },
   methods: {
+    exportExcel() {
+      const tHeader = [
+        "商品名称",
+        "核销码",
+        "核销人",
+        "创建时间",
+        "核销时间",
+        "核销码有效期",
+        "所属订单"
+      ]; //excel表头
+      const data = this.formatJson(this.list);
+      console.log(export_json_to_excel);
+      export_json_to_excel({
+        header: tHeader,
+        data,
+        filename: +new Date() + this.$route.meta.title,
+        autoWidth: true,
+        bookType: "xlsx"
+      });
+    },
+
+    formatJson(jsonData) {
+      return jsonData.map(v => {
+        let arr = [];
+        arr.push(v.g_name);
+        arr.push(v.tv_code);
+        arr.push(v.ms_name);
+        arr.push(v.gt_createtime);
+        arr.push(v.verify_time);
+        arr.push(v.time_between);
+        arr.push(v.t_tid);
+        return arr;
+      });
+    },
     onSubmit() {
-      this.getList()
+      this.getList();
     },
     getList() {
       verifyList(this.page, this.size, this.search).then(response => {
