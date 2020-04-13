@@ -12,6 +12,8 @@
     "axios": "^0.19.2",
     "core-js": "^3.6.4",
     "element-ui": "^2.13.0",
+    "file-saver": "^2.0.2",
+    "js-xlsx": "^0.8.22",
     "qs": "^6.9.3",
     "vue": "^2.6.11",
     "vue-router": "^3.1.6",
@@ -34,6 +36,7 @@
     "node-sass": "^4.12.0",
     "prettier": "^1.19.1",
     "sass-loader": "^8.0.2",
+    "script-loader": "^0.7.2",
     "vue-template-compiler": "^2.6.11"
   }
 }

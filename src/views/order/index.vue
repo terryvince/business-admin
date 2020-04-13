@@ -17,7 +17,10 @@
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-input v-model="form.phone" placeholder="订单号/手机号/昵称/姓名"></el-input>
+        <el-input
+          v-model="form.phone"
+          placeholder="订单号/手机号/昵称/姓名"
+        ></el-input>
       </el-form-item>
       <el-form-item>
         <el-select v-model="form.status" placeholder="订单状态">
@@ -41,8 +44,12 @@
         ></el-date-picker>
       </el-form-item>
       <el-form-item>
-        <el-button class="left-20" type="primary" @click="onSubmit">搜索</el-button>
-        <el-button class="left-20" type="primary" @click="onSubmit">导出到Excel</el-button>
+        <el-button class="left-20" type="primary" @click="onSubmit"
+          >搜索</el-button
+        >
+        <el-button class="left-20" type="primary" @click="exportExcel"
+          >导出到Excel</el-button
+        >
       </el-form-item>
     </el-form>
     <el-divider direction="horizontal"></el-divider>
@@ -52,27 +59,50 @@
           <span>{{ scope.$index + 1 }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="t_tid" label="订单号" width="200px"></el-table-column>
-      <el-table-column prop="to_title" label="订单商品" width="180px"></el-table-column>
-      <el-table-column prop="goods_type_txt" label="商品类型" width="90"></el-table-column>
+      <el-table-column
+        prop="t_tid"
+        label="订单号"
+        width="200px"
+      ></el-table-column>
+      <el-table-column
+        prop="to_title"
+        label="订单商品"
+        width="180px"
+      ></el-table-column>
+      <el-table-column
+        prop="goods_type_txt"
+        label="商品类型"
+        width="90"
+      ></el-table-column>
       <el-table-column label="商品数量/核销码" width="140">
         <template slot-scope="scope">
           <div>
             <span>
               <p>核销剩余:{{ scope.row.ticket_valid }}</p>
-              <p>已被核销:{{scope.row.ticket_used}}</p>
-              <p>商品数量:{{scope.row.to_num}}</p>
+              <p>已被核销:{{ scope.row.ticket_used }}</p>
+              <p>商品数量:{{ scope.row.to_num }}</p>
             </span>
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="g_seller_price" label="结算价" width="100"></el-table-column>
+      <el-table-column
+        prop="g_seller_price"
+        label="结算价"
+        width="100"
+      ></el-table-column>
       <el-table-column label="收货信息">
         <template slot-scope="scope">
           <div>
-            <p>昵称: {{scope.row.t_buyer_nick}}</p>
-            <p>电话: {{scope.row.t_phone_ext}}</p>
-            <p>地址: {{scope.row.g_verify_type == 'code' ? '无需地址' : scope.row.t_address_ext}}</p>
+            <p>昵称: {{ scope.row.t_buyer_nick }}</p>
+            <p>电话: {{ scope.row.t_phone_ext }}</p>
+            <p>
+              地址:
+              {{
+                scope.row.g_verify_type == "code"
+                  ? "无需地址"
+                  : scope.row.t_address_ext
+              }}
+            </p>
           </div>
         </template>
       </el-table-column>
@@ -83,22 +113,31 @@
         <template slot-scope="scope">
           <div>
             <el-link
-              v-if="scope.row.g_verify_type == 'ship'  && scope.row.t_status == 3"
+              v-if="
+                scope.row.g_verify_type == 'ship' && scope.row.t_status == 3
+              "
               @click="getShipping(scope.row.t_tid)"
               type="primary"
-            >发货</el-link>
+              >发货</el-link
+            >
             <el-link
-              v-if="scope.row.g_verify_type == 'ship' && scope.row.t_status == 4"
+              v-if="
+                scope.row.g_verify_type == 'ship' && scope.row.t_status == 4
+              "
               type="primary"
               style="margin-left:10px"
               @click="showEditDialog(scope.row)"
-            >修改收货信息</el-link>
+              >修改收货信息</el-link
+            >
             <el-link
-              v-if="scope.row.g_verify_type == 'ship' && scope.row.t_status == 4"
+              v-if="
+                scope.row.g_verify_type == 'ship' && scope.row.t_status == 4
+              "
               type="primary"
               style="margin-left:10px"
               @click="showShipping(scope.row)"
-            >查看物流信息</el-link>
+              >查看物流信息</el-link
+            >
           </div>
         </template>
       </el-table-column>
@@ -119,14 +158,21 @@
       <el-form ref="dialogForm" :model="dialogForm" label-width="80px">
         <el-form-item label="物流公司">
           <el-select v-model="dialogForm.company" placeholder="物流公司">
-            <el-option v-for="(item,index) in shipping" :key="index" :value="item"></el-option>
+            <el-option
+              v-for="(item, index) in shipping"
+              :key="index"
+              :value="item"
+            ></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="物流单号" prop="code">
           <el-input v-model="dialogForm.code" placeholder="物流单号"></el-input>
         </el-form-item>
         <el-form-item label="备注信息" prop="expressNote">
-          <el-input v-model="dialogForm.expressNote" placeholder="备注信息"></el-input>
+          <el-input
+            v-model="dialogForm.expressNote"
+            placeholder="备注信息"
+          ></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -135,13 +181,24 @@
       </span>
     </el-dialog>
     <!-- 修改地址电话dialog -->
-    <el-dialog title="修改收货信息" :visible.sync="edit_dialog" width="30%" center>
+    <el-dialog
+      title="修改收货信息"
+      :visible.sync="edit_dialog"
+      width="30%"
+      center
+    >
       <el-form ref="dialog_address" :model="dialog_address" label-width="80px">
         <el-form-item label="收货地址" prop="address">
-          <el-input v-model="dialog_address.address" placeholder="收货地址"></el-input>
+          <el-input
+            v-model="dialog_address.address"
+            placeholder="收货地址"
+          ></el-input>
         </el-form-item>
         <el-form-item label="电话" prop="phone">
-          <el-input v-model="dialog_address.phone" placeholder="电话"></el-input>
+          <el-input
+            v-model="dialog_address.phone"
+            placeholder="电话"
+          ></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -151,19 +208,24 @@
     </el-dialog>
 
     <!-- 查看物流dialog -->
-    <el-dialog title="物流信息" :visible.sync="shipping_detail_dialog" width="30%" center>
+    <el-dialog
+      title="物流信息"
+      :visible.sync="shipping_detail_dialog"
+      width="30%"
+      center
+    >
       <el-form label-width="120px">
-        <el-form-item label="物流公司：" >
-          <span>{{shipping_detail.company}}</span>
+        <el-form-item label="物流公司：">
+          <span>{{ shipping_detail.company }}</span>
         </el-form-item>
-        <el-form-item label="物流单号：" >
-          <span>{{shipping_detail.shipping_no}}</span>
+        <el-form-item label="物流单号：">
+          <span>{{ shipping_detail.shipping_no }}</span>
         </el-form-item>
-        <el-form-item label="发货时间：" >
-          <span>{{shipping_detail.express_time}}</span>
+        <el-form-item label="发货时间：">
+          <span>{{ shipping_detail.express_time }}</span>
         </el-form-item>
-        <el-form-item label="发货备注：" >
-          <span>{{shipping_detail.express_note}}</span>
+        <el-form-item label="发货备注：">
+          <span>{{ shipping_detail.express_note }}</span>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -236,7 +298,8 @@ export default {
       dialog_address: {
         address: "",
         phone: ""
-      }
+      },
+      publicPath: process.env.BASE_URL
     };
   },
   created() {
@@ -257,6 +320,50 @@ export default {
     handleCurrentChange(val) {
       this.page = val;
       this.getList();
+    },
+    exportExcel() {
+      // console.log(this.publicPath);
+      import(this.publicPath + "vendor/Export2Excel.js").then(excel => {
+        const tHeader = [
+          "订单号",
+          "订单商品",
+          "商品类型",
+          "商品数量/核销码",
+          "结算价",
+          "收货信息",
+          "备注",
+          "支付时间",
+          "状态"
+        ]; //excel表头
+        const data = this.formatJson(this.list);
+        excel.export_json_to_excel({
+          header: tHeader,
+          data,
+          filename: +new Date() + this.$route.meta.title,
+          autoWidth: true,
+          bookType: "xlsx"
+        });
+      });
+    },
+
+    formatJson(jsonData) {
+      return jsonData.map(v => {
+        let arr = [];
+        arr.push(v.t_tid);
+        arr.push(v.to_title);
+        arr.push(v.goods_type_txt);
+        arr.push(
+          `核销剩余：${v.ticket_valid}\n已被核销：${v.ticket_used}\n商品数量：${v.to_num}`
+        );
+        arr.push(v.g_seller_price);
+        arr.push(
+          `昵称：${v.t_buyer_nick}\n电话：${v.t_phone_ext}\n地址：${v.t_address_ext}`
+        );
+        arr.push(v.t_note);
+        arr.push(v.t_pay_time);
+        arr.push(v.t_status_txt);
+        return arr;
+      });
     },
 
     getList() {

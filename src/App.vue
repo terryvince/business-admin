@@ -18,15 +18,15 @@ export default {
   },
   methods: {
     handleNodeClick(data) {
-      console.log(data);
+      window.console.log(data);
     },
     logout() {
       // 退出登录
       logoutLogin().then(res => {
-        console.log(res);
+        window.console.log(res);
         //if (res.data.ec == 200) {
-          this.toggleLogin();
-          this.$router.replace({ path: "/login" });
+        this.toggleLogin();
+        this.$router.replace({ path: "/login" });
         //}
       });
     },
