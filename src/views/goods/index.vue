@@ -23,11 +23,12 @@
           <span>{{ scope.$index + 1 }}</span>
         </template>
       </el-table-column>
-      <el-table-column
-        prop="g_name"
-        label="商品名"
-        width="180"
-      ></el-table-column>
+      <el-table-column prop="g_name" label="商品名" width="180" ></el-table-column>
+      <el-table-column  prop="g_cover"  label="图片" width="180"  >
+        <template slot-scope="scope">
+          <img :src="scope.row.g_cover" width="100" height="100"/>
+        </template>
+      </el-table-column>
       <el-table-column label="商品类型" width="180">
         <template slot-scope="scope">
           <span>{{
@@ -35,7 +36,12 @@
           }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="g_seller_price" label="结算价"></el-table-column>
+      <el-table-column prop="" label="结算价">
+        <template slot-scope="scope">
+          <span>总结算价：{{scope.row.g_seller_price}} </span><br/>
+          <span>总需要核销两次：（{{scope.row.g_create_ticket_num}}）</span>
+        </template>
+      </el-table-column>
       <el-table-column prop="g_sold" label="已售"></el-table-column>
       <el-table-column prop="g_create_day" label="创建时间"></el-table-column>
     </el-table>
