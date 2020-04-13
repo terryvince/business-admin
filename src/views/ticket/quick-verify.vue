@@ -13,15 +13,32 @@
         <el-input v-model="form1.code" placeholder="请输入核销码"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button class="left-20" type="primary" @click="checkTick('form1')">查询</el-button>
+        <el-button class="left-20" type="primary" @click="checkTick('form1')"
+          >查询</el-button
+        >
       </el-form-item>
     </el-form>
     <!-- 弹框 -->
-    <el-dialog title="快捷核销" :visible.sync="centerDialogVisible" width="30%" center>
-      <el-form ref="dialogForm" :model="dialogForm" label-width="80px">
-        <el-form-item v-for="(item,index) in product" :key="index">
-          <el-checkbox-group v-for="item1 in item" :key="item1.gt_id" v-model="dialogForm.codes">
-            <el-checkbox :label="item1.gt_id">{{item1.gt_desc}}</el-checkbox>
+    <el-dialog
+      title="快捷核销"
+      :visible.sync="centerDialogVisible"
+      width="500px"
+      center
+    >
+      <el-form
+        ref="dialogForm"
+        :model="dialogForm"
+        label-width="80px"
+        class="flex-wrap"
+        style=""
+      >
+        <el-form-item v-for="(item, index) in product" :key="index">
+          <el-checkbox-group
+            v-for="item1 in item"
+            :key="item1.gt_id"
+            v-model="dialogForm.codes"
+          >
+            <el-checkbox :label="item1.gt_id">{{ item1.gt_desc }}</el-checkbox>
           </el-checkbox-group>
           <el-divider></el-divider>
         </el-form-item>
@@ -35,6 +52,13 @@
 </template>
 
 <style lang="scss">
+.el-checkbox .el-checkbox__label {
+  display: inline-grid;
+  white-space: pre-line;
+  word-wrap: break-word;
+  overflow: hidden;
+  line-height: 20px;
+}
 .shortcut-check {
   background: white;
   min-height: 100px;
@@ -93,9 +117,9 @@ export default {
         }
         //清空记录
         this.$message({
-            'message':'核销完成',
-            'type' : 'success'
-        })
+          message: "核销完成",
+          type: "success"
+        });
         this.$refs["dialogForm"].resetFields();
         this.centerDialogVisible = false;
         this.product = {};

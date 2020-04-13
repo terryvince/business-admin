@@ -5,7 +5,7 @@
       :label-position="'left'"
       :model="form"
       size="mini"
-      class="flex-main-start"
+      class="flex-main-start flex-wrap"
     >
       <el-form-item>
         <el-input v-model="form.keyword" placeholder="商品名称"></el-input>
@@ -272,7 +272,14 @@ export default {
     },
 
     getShipping(tid) {
-      this.$refs["dialogForm"].resetFields();
+      // this.$refs["dialogForm"].resetFields();    //此时dom未渲染，无法取得dialogForm，只能通过数据重置
+      this.dialogForm = {
+        code: "",
+        company: "",
+        tid: "",
+        express: "",
+        expressNote: ""
+      };
       this.dialogForm.tid = tid;
       //这里之后改为vuex存储状态，控制请求
       if (this.shipping.length == 0) {
