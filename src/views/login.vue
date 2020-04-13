@@ -14,17 +14,18 @@
             suffix-icon="el-icon-user-solid"
           ></el-input>
         </el-form-item>
+        <!-- suffix-icon="el-icon-s-cooperation" -->
         <el-form-item label="密码">
           <el-input
             v-model="loginForm.password"
-            suffix-icon="el-icon-s-cooperation"
+            show-password
             @keyup.enter.native="onSubmit"
           ></el-input>
         </el-form-item>
         <el-form-item size="medium">
           <div class="flex-main-start">
             <el-button type="primary" @click="onSubmit">登录</el-button>
-            <el-button>注册</el-button>
+            <!-- <el-button>注册</el-button> -->
           </div>
         </el-form-item>
       </el-form>
