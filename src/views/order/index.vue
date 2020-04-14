@@ -329,6 +329,7 @@ export default {
         const resp = response.data;
         if (resp.ec !== 200) {
           this.$message.error(resp.em);
+          this.$store.commit("updateLoading", false);
           return false;
         }
         list = resp.data.list;
