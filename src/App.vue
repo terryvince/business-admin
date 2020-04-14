@@ -13,7 +13,8 @@ export default {
     ...mapGetters({
       layout: "layout",
       userInfo: "userInfo",
-      mainLoading: "mainLoading"
+      mainLoading: "mainLoading",
+      loadingTitle: "loadingTitle"
     })
   },
   methods: {
@@ -42,7 +43,7 @@ export default {
   <div id="app">
     <el-container
       v-loading="mainLoading"
-      element-loading-text="拼命加载中"
+      :element-loading-text="loadingTitle"
       element-loading-spinner="el-icon-loading"
       element-loading-background="rgba(0, 0, 0, 0.8)"
     >

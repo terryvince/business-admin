@@ -16,5 +16,8 @@ export default {
   },
   currentNodeName: state => {
     return state.currentNodeName;
+  },
+  loadingTitle: state => {
+    return state.loadingTitle;
   }
 };

@@ -1,7 +1,8 @@
 const mutations = {
   // 控制整页加载显示 false 不显示加载，true显示加载
-  updateLoading(state, isLoading) {
+  updateLoading(state, isLoading, title) {
     state.mainLoading = isLoading;
+    if (title) state.loadingTitle = title;
   },
   // 设置菜单栏的选中状态 by name
   updateCurrentNodeName(state, name) {

@@ -262,7 +262,7 @@ import {
   deliver,
   changeDeliver
 } from "@/servers/request";
-import {export_json_to_excel} from "@/assets/Export2Excel.js";
+import { export_json_to_excel } from "@/assets/Export2Excel.js";
 export default {
   name: "order",
   data: function() {
@@ -323,25 +323,36 @@ export default {
       this.getList();
     },
     exportExcel() {
-      const tHeader = [
-        "订单号",
-        "订单商品",
-        "商品类型",
-        "商品数量/核销码",
-        "结算价",
-        "收货信息",
-        "备注",
-        "支付时间",
-        "状态"
-      ]; //excel表头
-      const data = this.formatJson(this.list);
-      console.log(export_json_to_excel);
-      export_json_to_excel({
-        header: tHeader,
-        data,
-        filename: +new Date() + this.$route.meta.title,
-        autoWidth: true,
-        bookType: "xlsx"
+      let list = [];
+      this.$store.commit("updateLoading", true, "excel导出中...");
+      orderList(1, 2000, this.form).then(response => {
+        const resp = response.data;
+        if (resp.ec !== 200) {
+          this.$message.error(resp.em);
+          return false;
+        }
+        list = resp.data.list;
+        const tHeader = [
+          "订单号",
+          "订单商品",
+          "商品类型",
+          "商品数量/核销码",
+          "结算价",
+          "收货信息",
+          "备注",
+          "支付时间",
+          "状态"
+        ]; //excel表头
+        const data = this.formatJson(list);
+        console.log(export_json_to_excel);
+        export_json_to_excel({
+          header: tHeader,
+          data,
+          filename: +new Date() + this.$route.meta.title,
+          autoWidth: true,
+          bookType: "xlsx"
+        });
+        this.$store.commit("updateLoading", false);
       });
     },
 
