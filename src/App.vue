@@ -61,7 +61,7 @@ export default {
           </el-dropdown>
         </div>
       </el-header>
-      <el-container>
+      <el-container class="fixed-height">
         <el-aside v-show="layout.isShowAside" width="200px">
           <aside-bar />
         </el-aside>
@@ -99,6 +99,9 @@ export default {
 }
 .el-main {
   background: #f1f1f1;
+}
+.el-container.fixed-height {
+  height: calc(100% - 60px);
 }
 .el-container {
   height: 100%;
