@@ -106,6 +106,22 @@ function changeDeliver(data){
   })
 }
 
+function withdrawCount(){
+  return http({
+    url: `merchant.php?map=withdraw_count`,
+    method: 'get'
+  })
+}
+
+function merchantSellList(page, size, data){
+  return http({
+    url: `merchant.php?map=index_data&page=${page}&size=${size}`,
+    method: 'post',
+    data
+  })
+}
+
+
 
 export {
   postLogin, //登陆
@@ -121,5 +137,7 @@ export {
   withdrawDetail, //提现详情
   shippingList, //物流列表
   deliver, //发货
-  changeDeliver //修改收货地址
+  changeDeliver, //修改收货地址
+  withdrawCount, //首页提现统计
+  merchantSellList, //首页销售数据
 };
