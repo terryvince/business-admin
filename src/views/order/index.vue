@@ -98,8 +98,8 @@
             <p>
               地址:
               {{
-                scope.row.g_verify_type == "code"
-                  ? "无需地址"
+                scope.row.g_verify_type == 'code'
+                  ? '无需地址'
                   : scope.row.t_address_ext
               }}
             </p>
@@ -250,29 +250,29 @@ p {
 
 <script>
 const orderStatus = [
-  { type: "wait_send", name: "待发货" },
-  { type: "wait_use", name: "待核销" },
-  { type: "send", name: "已发货" },
-  { type: "confirm", name: "已收货" },
-  { type: "complete", name: "已完成" }
+  { type: 'wait_send', name: '待发货' },
+  { type: 'wait_use', name: '待核销' },
+  { type: 'send', name: '已发货' },
+  { type: 'confirm', name: '已收货' },
+  { type: 'complete', name: '已完成' }
 ];
 import {
   orderList,
   shippingList,
   deliver,
   changeDeliver
-} from "@/servers/request";
-import { export_json_to_excel } from "@/assets/Export2Excel.js";
+} from '@/servers/request';
+import { export_json_to_excel } from '@/assets/Export2Excel.js';
 export default {
-  name: "order",
+  name: 'order',
   data: function() {
     return {
       form: {
-        keyword: "",
-        type: "",
-        timeRange: "",
-        status: "",
-        phone: ""
+        keyword: '',
+        type: '',
+        timeRange: '',
+        status: '',
+        phone: ''
       },
       total: 0,
       page: 1,
@@ -282,23 +282,23 @@ export default {
       shipping_dialog: false,
       shipping_detail_dialog: false,
       shipping_detail: {
-        company: "",
-        shipping_no: "",
-        express_time: "",
-        express_note: ""
+        company: '',
+        shipping_no: '',
+        express_time: '',
+        express_note: ''
       },
       edit_dialog: false,
       shipping: [],
       dialogForm: {
-        code: "",
-        company: "",
-        tid: "",
-        express: "",
-        expressNote: ""
+        code: '',
+        company: '',
+        tid: '',
+        express: '',
+        expressNote: ''
       },
       dialog_address: {
-        address: "",
-        phone: ""
+        address: '',
+        phone: ''
       },
       publicPath: process.env.BASE_URL
     };
@@ -324,25 +324,25 @@ export default {
     },
     exportExcel() {
       let list = [];
-      this.$store.commit("updateLoading", true, "excel导出中...");
+      this.$store.commit('updateLoading', true, 'excel导出中...');
       orderList(1, 2000, this.form).then(response => {
         const resp = response.data;
         if (resp.ec !== 200) {
           this.$message.error(resp.em);
-          this.$store.commit("updateLoading", false);
+          this.$store.commit('updateLoading', false);
           return false;
         }
         list = resp.data.list;
         const tHeader = [
-          "订单号",
-          "订单商品",
-          "商品类型",
-          "商品数量/核销码",
-          "结算价",
-          "收货信息",
-          "备注",
-          "支付时间",
-          "状态"
+          '订单号',
+          '订单商品',
+          '商品类型',
+          '商品数量/核销码',
+          '结算价',
+          '收货信息',
+          '备注',
+          '支付时间',
+          '状态'
         ]; //excel表头
         const data = this.formatJson(list);
         console.log(export_json_to_excel);
@@ -351,9 +351,9 @@ export default {
           data,
           filename: +new Date() + this.$route.meta.title,
           autoWidth: true,
-          bookType: "xlsx"
+          bookType: 'xlsx'
         });
-        this.$store.commit("updateLoading", false);
+        this.$store.commit('updateLoading', false);
       });
     },
 
@@ -392,11 +392,11 @@ export default {
     getShipping(tid) {
       // this.$refs["dialogForm"].resetFields();    //此时dom未渲染，无法取得dialogForm，只能通过数据重置
       this.dialogForm = {
-        code: "",
-        company: "",
-        tid: "",
-        express: "",
-        expressNote: ""
+        code: '',
+        company: '',
+        tid: '',
+        express: '',
+        expressNote: ''
       };
       this.dialogForm.tid = tid;
       //这里之后改为vuex存储状态，控制请求
@@ -441,10 +441,10 @@ export default {
     },
 
     changeReceive() {
-      this.$confirm("确定要修改吗", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
+      this.$confirm('确定要修改吗', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
       }).then(() => {
         changeDeliver(this.dialog_address).then(response => {
           const resp = response.data;
@@ -454,8 +454,8 @@ export default {
           }
           this.edit_dialog = false;
           this.$message({
-            message: "修改成功",
-            type: "success"
+            message: '修改成功',
+            type: 'success'
           });
 
           this.getList();

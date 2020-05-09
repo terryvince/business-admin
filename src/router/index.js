@@ -1,9 +1,9 @@
-import Vue from "vue";
-import VueRouter from "vue-router";
-import store from "../store";
-import count from "../views/count.vue";
-import login from "../views/login.vue";
-import notFound from "../views/notFound.vue";
+import Vue from 'vue';
+import VueRouter from 'vue-router';
+import store from '../store';
+import count from '../views/count.vue';
+import login from '../views/login.vue';
+import notFound from '../views/notFound.vue';
 
 Vue.use(VueRouter);
 
@@ -16,77 +16,77 @@ VueRouter.prototype.push = function push(location, onResolve, onReject) {
 
 const routes = [
   {
-    path: "/",
-    redirect: "/count"
+    path: '/',
+    redirect: '/count'
   },
   {
-    path: "/count",
-    name: "count",
+    path: '/count',
+    name: 'count',
     meta: {
-      title: "统计"
+      title: '统计'
     },
     component: count
   },
   {
-    path: "/login",
-    name: "login",
+    path: '/login',
+    name: 'login',
     meta: {
-      title: "登录"
+      title: '登录'
     },
     component: login
   },
   {
-    path: "/goods",
-    name: "goods",
+    path: '/goods',
+    name: 'goods',
     meta: {
-      title: "商品管理"
+      title: '商品管理'
     },
     component: () =>
-      import(/* webpackChunkName: "goods" */ "@/views/goods/index.vue")
+      import(/* webpackChunkName: "goods" */ '@/views/goods/index.vue')
   },
   {
-    path: "/order",
-    name: "order",
+    path: '/order',
+    name: 'order',
     meta: {
-      title: "订单管理"
+      title: '订单管理'
     },
     component: () =>
-      import(/* webpackChunkName: "order" */ "@/views/order/index.vue")
+      import(/* webpackChunkName: "order" */ '@/views/order/index.vue')
   },
   {
-    path: "/verifyRecord",
-    name: "verifyRecord",
+    path: '/verifyRecord',
+    name: 'verifyRecord',
     meta: {
-      title: "核销记录"
+      title: '核销记录'
     },
     component: () =>
       import(
-        /* webpackChunkName: "checkRecorder" */ "@/views/ticket/verify-recode.vue"
+        /* webpackChunkName: "checkRecorder" */ '@/views/ticket/verify-recode.vue'
       )
   },
   {
-    path: "/withdraw",
-    name: "withdraw",
+    path: '/withdraw',
+    name: 'withdraw',
     meta: {
-      title: "提现记录"
+      title: '提现记录'
     },
     component: () =>
-      import(/* webpackChunkName: "withdraw" */ "@/views/withdraw/index.vue")
+      import(/* webpackChunkName: "withdraw" */ '@/views/withdraw/index.vue')
   },
   {
-    path: "/quickVerify",
-    name: "quickVerify",
+    path: '/quickVerify',
+    name: 'quickVerify',
     meta: {
-      title: "快捷核销"
+      title: '快捷核销'
     },
-    component: () => import("@/views/ticket/quick-verify.vue")
+    component: () => import('@/views/ticket/quick-verify.vue')
   },
   {
-    path: "*",
-    name: "notFound",
+    path: '*',
+    name: 'notFound',
     component: notFound,
     meta: {
-      title: "404"
+      title: '404'
     }
   }
 ];
@@ -95,7 +95,7 @@ const router = new VueRouter({
   routes
 });
 
-const whiteList = ["login", "notFound"];
+const whiteList = ['login', 'notFound'];
 
 router.beforeEach((to, from, next) => {
   const { isLogin } = store.state;
@@ -106,10 +106,10 @@ router.beforeEach((to, from, next) => {
   }
   if (isLogin) {
     // store.commit("updateLoading", true,""); //启用整页加载，跳转页面先出现加载状态，页面内修改为false关闭加载
-    store.commit("updateCurrentNodeName", to.name); //设置菜单选中状态
+    store.commit('updateCurrentNodeName', to.name); //设置菜单选中状态
     next();
   } else {
-    next({ path: "/login", replace: true });
+    next({ path: '/login', replace: true });
   }
 });
 

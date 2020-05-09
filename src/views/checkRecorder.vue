@@ -80,25 +80,25 @@
 // @ is an alias to /src
 
 export default {
-  name: "checkRecorder",
+  name: 'checkRecorder',
   data: function() {
     return {
-      form: { goodsName: "", goodsType: "", date1: "", date2: "" },
+      form: { goodsName: '', goodsType: '', date1: '', date2: '' },
       currentPage3: 5,
       list: [
         {
-          col1: "麻辣鱼",
-          goodsType: "物流商品",
-          price: "96.00",
-          sale: "200",
-          create_at: "2019-11-18 17:08:52"
+          col1: '麻辣鱼',
+          goodsType: '物流商品',
+          price: '96.00',
+          sale: '200',
+          create_at: '2019-11-18 17:08:52'
         },
         {
-          name: "麻辣鱼",
-          goodsType: "物流商品",
-          price: "96.00",
-          sale: "200",
-          create_at: "2019-11-18 17:08:52"
+          name: '麻辣鱼',
+          goodsType: '物流商品',
+          price: '96.00',
+          sale: '200',
+          create_at: '2019-11-18 17:08:52'
         }
       ]
     };
@@ -112,7 +112,7 @@ export default {
   },
   methods: {
     onSubmit() {
-      console.log("11");
+      console.log('11');
     },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);

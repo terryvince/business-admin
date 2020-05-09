@@ -39,7 +39,7 @@
   right: 0;
   bottom: 0;
   top: 0;
-  background: url("../assets/login-bg.jpg") no-repeat center;
+  background: url('../assets/login-bg.jpg') no-repeat center;
   background-size: cover;
 }
 .login-wrap {
@@ -54,24 +54,24 @@
 }
 </style>
 <script>
-import { postLogin } from "@/servers/request";
-import { mapMutations } from "vuex";
+import { postLogin } from '@/servers/request';
+import { mapMutations } from 'vuex';
 export default {
-  name: "login",
+  name: 'login',
   components: {},
   data: function() {
     return {
-      labelPosition: "left",
+      labelPosition: 'left',
       loginForm: {
-        username: "",
-        password: ""
+        username: '',
+        password: ''
       }
     };
   },
   methods: {
     ...mapMutations({
-      toggleLayout: "toggleLayout",
-      toggleLogin: "toggleLogin"
+      toggleLayout: 'toggleLayout',
+      toggleLogin: 'toggleLogin'
     }),
     onSubmit() {
       postLogin(this.loginForm)
@@ -80,10 +80,10 @@ export default {
             this.toggleLogin(res.data.data);
             this.toggleLayout();
             this.$message({
-              message: "登录成功!",
-              type: "success"
+              message: '登录成功!',
+              type: 'success'
             });
-            this.$router.push({ path: "/count" });
+            this.$router.push({ path: '/count' });
           } else {
             this.$message.error(res.data.em);
           }

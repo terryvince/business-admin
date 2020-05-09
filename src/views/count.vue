@@ -2,12 +2,12 @@
   <div>
     <div class="count flex-main-start" style="margin-bottom:15px">
       <div class="count-block box-shadow flex-main-start flex-column">
-        <p>已提现 :￥{{withdraw}}</p>
+        <p>已提现 :￥{{ withdraw }}</p>
       </div>
       <div class="count-block box-shadow flex-main-start flex-column">
-        <p>可提现 :￥{{withdraw_able}}</p>
+        <p>可提现 :￥{{ withdraw_able }}</p>
       </div>
-      <router-link :to="'withdraw'" >立即提现</router-link>
+      <router-link :to="'withdraw'">立即提现</router-link>
     </div>
     <div>
       <el-form
@@ -29,13 +29,31 @@
           ></el-date-picker>
         </el-form-item>
         <el-form-item>
-          <el-button class="left-20" type="primary" @click="onSubmit">搜索</el-button>
+          <el-button class="left-20" type="primary" @click="onSubmit"
+            >搜索</el-button
+          >
         </el-form-item>
       </el-form>
-      <el-table :data="list" height="600" style="width: 100%;text-align:center;">
-        <el-table-column type="index" label="序号" width="100px"></el-table-column>
-        <el-table-column prop="g_name" label="商品" width="350px"></el-table-column>
-        <el-table-column prop="sum_num" width="100px" label="销量"></el-table-column>
+      <el-table
+        :data="list"
+        height="600"
+        style="width: 100%;text-align:center;"
+      >
+        <el-table-column
+          type="index"
+          label="序号"
+          width="100px"
+        ></el-table-column>
+        <el-table-column
+          prop="g_name"
+          label="商品"
+          width="350px"
+        ></el-table-column>
+        <el-table-column
+          prop="sum_num"
+          width="100px"
+          label="销量"
+        ></el-table-column>
         <el-table-column prop="sum_total" label="总金额"></el-table-column>
       </el-table>
       <div class="block">
@@ -68,9 +86,9 @@
 }
 </style>
 <script>
-import { withdrawCount, merchantSellList } from "@/servers/request";
+import { withdrawCount, merchantSellList } from '@/servers/request';
 export default {
-  name: "count",
+  name: 'count',
   components: {},
   data() {
     return {
@@ -81,7 +99,7 @@ export default {
       withdraw_able: 0,
       list: [],
       form: {
-        timeRange: ""
+        timeRange: ''
       }
     };
   },
@@ -112,7 +130,7 @@ export default {
           return false;
         }
         this.list = resp.data.list;
-        this.total = resp.data.count
+        this.total = resp.data.count;
       });
     },
     getWithdraw() {
