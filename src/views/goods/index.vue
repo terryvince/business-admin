@@ -47,7 +47,7 @@
           <span>总需要核销两次：（{{ scope.row.g_create_ticket_num }}）</span>
         </template>
       </el-table-column>
-      <el-table-column prop="g_sold" label="已售"></el-table-column>
+      <el-table-column prop="g_sell_num" label="已售"></el-table-column>
       <el-table-column prop="g_create_day" label="创建时间"></el-table-column>
     </el-table>
     <div class="block top-20">
