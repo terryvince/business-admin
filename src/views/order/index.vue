@@ -19,7 +19,7 @@
       <el-form-item>
         <el-input
           v-model="form.phone"
-          placeholder="订单号/手机号/昵称/姓名"
+          placeholder="手机号"
         ></el-input>
       </el-form-item>
       <el-form-item>
