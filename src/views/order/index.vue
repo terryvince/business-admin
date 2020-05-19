@@ -114,7 +114,7 @@
           <div>
             <el-link
               v-if="
-                scope.row.g_verify_type == 'ship' && scope.row.t_status == 3 && scope.row.t_feedback == 0
+                scope.row.g_verify_type == 'ship' && scope.row.t_status == 3 && (scope.row.t_feedback == 0 || (scope.row.t_fd_result != 2 && scope.row.t_fd_status == 3) )
               "
               @click="getShipping(scope.row.t_tid)"
               type="primary"
